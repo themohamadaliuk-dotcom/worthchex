@@ -1,8 +1,9 @@
 @import url('./style-core.css');
 
 /* =========================================================
-   WORTHCHEX — BRAND LOGO OVERRIDE
-   Uses the supplied WorthChex master logo in the site navbar.
+   WORTHCHEX — BRAND LOGO / RESPONSIVE NAV OVERRIDE
+   Supplied master logo, tuned for crisp rendering and a
+   compact mobile header.
    ========================================================= */
 
 .nav-inner > .logo {
@@ -16,7 +17,9 @@
   font-size: 0;
   line-height: 0;
   color: transparent;
-  background: url('assets/worthchex-logo.webp') left center / contain no-repeat;
+  background: url('assets/worthchex-logo.webp') left center / 100% auto no-repeat;
+  background-color: transparent;
+  image-rendering: auto;
 }
 
 .nav-inner > .logo .logo-icon {
@@ -24,17 +27,42 @@
 }
 
 @media (max-width: 900px) {
+  .nav-inner {
+    padding: 11px 18px;
+  }
+
   .nav-inner > .logo {
     width: 230px;
-    height: 45px;
+    height: 46px;
     flex-basis: 230px;
+    background-size: 100% auto;
   }
 }
 
 @media (max-width: 700px) {
+  .nav-inner {
+    padding: 7px 14px 8px;
+    gap: 12px;
+  }
+
   .nav-inner > .logo {
-    width: 210px;
-    height: 41px;
-    flex-basis: 210px;
+    width: 184px;
+    height: 37px;
+    flex-basis: 184px;
+    background-size: 100% auto;
+    background-position: left center;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-inner {
+    padding: 6px 12px 7px;
+    gap: 10px;
+  }
+
+  .nav-inner > .logo {
+    width: 174px;
+    height: 35px;
+    flex-basis: 174px;
   }
 }
