@@ -4,6 +4,8 @@
 
   function initialiseResets() {
     document.querySelectorAll(".calculator-card").forEach(card => {
+      if (card.dataset.worthchexResetBound === "true") return;
+
       const controls = Array.from(card.querySelectorAll("input, select, textarea"));
       const initial = controls.map(control => ({
         control,
@@ -11,11 +13,10 @@
         checked: control.type === "checkbox" || control.type === "radio" ? control.checked : null
       }));
 
-      const resetButton = card.querySelector(
-        "#resetButton, #savingsResetButton, #debtResetButton, #mortgageResetButton, #salaryResetButton, #thReset, #compoundResetButton, #ciReset, #sdltResetButton, #sdReset, #loanResetButton"
-      );
-
+      const resetButton = card.querySelector(".reset-button");
       if (!resetButton) return;
+
+      card.dataset.worthchexResetBound = "true";
 
       resetButton.addEventListener("click", function () {
         initial.forEach(({ control, value, checked }) => {
@@ -32,7 +33,12 @@
           result.classList.add("hidden");
         });
 
-        ["savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory", "studentPlan", "thRegion", "thNI", "thPensionMethod", "thStudent", "ciContributionFreq", "ciCompounding", "sdFirst", "sdAdditional", "sdReplacing", "sdResident", "mortgageType", "mortgageFirstTime", "mortgageAdditional", "mortgageReplacing"].forEach(id => {
+        [
+          "savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory",
+          "studentPlan", "thRegion", "thNI", "thPensionMethod", "thStudent", "ciContributionFreq",
+          "ciCompounding", "sdFirst", "sdAdditional", "sdReplacing", "sdResident", "mortgageType",
+          "mortgageFirstTime", "mortgageAdditional", "mortgageReplacing", "vatMode", "vatRate", "carTerm"
+        ].forEach(id => {
           const control = document.getElementById(id);
           if (control && card.contains(control)) {
             control.dispatchEvent(new Event("change", { bubbles: true }));
