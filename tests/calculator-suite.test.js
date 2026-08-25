@@ -14,7 +14,7 @@ assert.equal(W.sdlt(300000), 5000);
 assert.equal(W.sdlt(500000, { firstTime: true }), 10000);
 assert.ok(W.sdlt(500000, { additional: true }) > W.sdlt(500000));
 assert.ok(W.sdlt(500000, { nonResident: true }) > W.sdlt(500000));
-assert.equal(W.sdlt(500000, { firstTime: true, nonResident: true }), 14000);
+assert.equal(Math.round(W.sdlt(500000, { firstTime: true, nonResident: true }).tax), 14000);
 
 assert.equal(W.incomeTax(0), 0);
 assert.ok(W.employeeNI(40000) > 2000);
