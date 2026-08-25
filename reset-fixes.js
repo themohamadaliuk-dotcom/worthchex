@@ -12,7 +12,7 @@
       }));
 
       const resetButton = card.querySelector(
-        "#resetButton, #savingsResetButton, #debtResetButton, #mortgageResetButton, #salaryResetButton, #compoundResetButton, #sdltResetButton, #loanResetButton"
+        "#resetButton, #savingsResetButton, #debtResetButton, #mortgageResetButton, #salaryResetButton, #thReset, #compoundResetButton, #ciReset, #sdltResetButton, #sdReset, #loanResetButton"
       );
 
       if (!resetButton) return;
@@ -32,7 +32,7 @@
           result.classList.add("hidden");
         });
 
-        ["savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory", "studentPlan", "compoundContributionFrequency", "compoundCompounding", "sdltFirstTime", "sdltAdditional", "sdltReplacing", "sdltNonResident", "mortgageType"].forEach(id => {
+        ["savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory", "studentPlan", "thRegion", "thNI", "thPensionMethod", "thStudent", "ciContributionFreq", "ciCompounding", "sdFirst", "sdAdditional", "sdReplacing", "sdResident", "mortgageType", "mortgageFirstTime", "mortgageAdditional", "mortgageReplacing"].forEach(id => {
           const control = document.getElementById(id);
           if (control && card.contains(control)) {
             control.dispatchEvent(new Event("change", { bubbles: true }));
