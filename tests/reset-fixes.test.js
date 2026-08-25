@@ -18,6 +18,7 @@ function makeControl(type, value, checked = false) {
 const input = makeControl("number", "40000");
 const select = makeControl("select-one", "rUK");
 const checkbox = makeControl("checkbox", "on", true);
+const date = makeControl("date", "2026-08-25");
 const result = {
   innerHTML: "<p>old result</p>",
   classList: {
@@ -36,7 +37,7 @@ const resetButton = {
 
 const card = {
   dataset: {},
-  controls: [input, select, checkbox],
+  controls: [input, select, checkbox, date],
   querySelectorAll(selector) {
     if (selector === "input, select, textarea") return this.controls;
     if (selector === ".result") return [result];
@@ -80,16 +81,18 @@ vm.runInNewContext(source, context, { filename: "reset-fixes.js" });
 input.value = "99999";
 select.value = "scotland";
 checkbox.checked = false;
+date.value = "2030-01-01";
 result.innerHTML = "<p>new result</p>";
 result.classList.remove("hidden");
 
 resetButton.click();
 
-assert.equal(input.value, "40000");
-assert.equal(select.value, "rUK");
-assert.equal(checkbox.checked, true);
-assert.equal(result.innerHTML, "");
-assert.equal(result.classList.contains("hidden"), true);
-assert.ok(select.dispatchCount > 0);
+assert.equal(input.value, "", "number field should be blank after reset");
+assert.equal(select.value, "", "select should be blank after reset");
+assert.equal(checkbox.checked, false, "checkbox should be unchecked after reset");
+assert.equal(date.value, "", "date field should be blank after reset");
+assert.equal(result.innerHTML, "", "result HTML should be cleared");
+assert.equal(result.classList.contains("hidden"), true, "result should be hidden after reset");
+assert.ok(select.dispatchCount > 0, "conditional UI should be refreshed");
 
-console.log("WorthChex reset regression test passed.");
+console.log("WorthChex blank-reset regression test passed.");
