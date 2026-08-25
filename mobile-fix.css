@@ -10,24 +10,40 @@ html, body {
     width: 100%;
     max-width: 100%;
     overflow: hidden;
+    background: #fff;
   }
 
   .nav-inner {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    box-sizing: border-box;
+    padding: 9px 14px 11px !important;
+    gap: 10px !important;
+    align-items: center !important;
   }
 
-  /* Final mobile logo/header tuning — intentionally last so it overrides earlier nav rules. */
+  /* Final mobile brand treatment. The extra vertical room is intentional:
+     it gives the white header a little more breathing space without making
+     the logo itself look oversized. */
   .nav-inner > .logo {
     width: 184px !important;
-    height: 40px !important;
-    flex: 0 0 184px !important;
+    height: 44px !important;
+    flex: 0 1 184px !important;
+    min-width: 0 !important;
     margin: 0 !important;
-    padding: 3px 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
     background-size: 100% auto !important;
     background-position: left center !important;
-    box-sizing: border-box !important;
+    background-repeat: no-repeat !important;
+  }
+
+  .nav-links {
+    min-width: 0;
+    flex: 1 1 auto;
+    align-items: center !important;
   }
 
   .hero {
@@ -83,15 +99,14 @@ html, body {
 
 @media (max-width: 420px) {
   .nav-inner {
-    padding: 6px 10px 8px;
-    gap: 8px;
+    padding: 8px 10px 10px !important;
+    gap: 7px !important;
   }
 
   .nav-inner > .logo {
     width: 166px !important;
-    height: 38px !important;
+    height: 42px !important;
     flex-basis: 166px !important;
-    padding: 3px 0 !important;
   }
 
   .nav-links {
@@ -100,5 +115,19 @@ html, body {
 
   .nav-links > a {
     font-size: 9px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-inner {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    gap: 6px !important;
+  }
+
+  .nav-inner > .logo {
+    width: 154px !important;
+    height: 40px !important;
+    flex-basis: 154px !important;
   }
 }
