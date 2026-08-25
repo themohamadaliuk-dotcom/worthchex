@@ -7,32 +7,30 @@
       if (card.dataset.worthchexResetBound === "true") return;
 
       const controls = Array.from(card.querySelectorAll("input, select, textarea"));
-      const initial = controls.map(control => ({
-        control,
-        value: control.value,
-        checked: control.type === "checkbox" || control.type === "radio" ? control.checked : null
-      }));
-
       const resetButton = card.querySelector(".reset-button");
       if (!resetButton) return;
 
       card.dataset.worthchexResetBound = "true";
 
       resetButton.addEventListener("click", function () {
-        initial.forEach(({ control, value, checked }) => {
+        // Final reset state: every user-editable field is blank.
+        controls.forEach(control => {
           if (!control.isConnected) return;
+
           if (control.type === "checkbox" || control.type === "radio") {
-            control.checked = Boolean(checked);
+            control.checked = false;
           } else {
-            control.value = value;
+            control.value = "";
           }
         });
 
+        // Clear every generated result on the calculator page.
         card.querySelectorAll(".result").forEach(result => {
           result.innerHTML = "";
           result.classList.add("hidden");
         });
 
+        // Re-run conditional UI logic after clearing values.
         [
           "savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory",
           "studentPlan", "thRegion", "thNI", "thPensionMethod", "thStudent", "ciContributionFreq",
