@@ -20,11 +20,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Run JavaScript syntax checks
+        run: |
+          node --check calculator-suite-final.js
+          node --check financial-suite-v4.js
+          node --check reset-fixes.js
+          node --check script.js
+          node --check advanced-calculators.js
       - name: Run legacy calculator regression tests
         run: node tests/calculations.test.js
       - name: Run advanced calculator regression tests
         run: node tests/advanced-calculators.test.js
       - name: Run unified calculator suite tests
         run: node tests/calculator-suite.test.js
+      - name: Run new calculator regression tests
+        run: node tests/new-tools-regression.test.js
+      - name: Run reset regression tests
+        run: node tests/reset-fixes.test.js
       - name: Run production script smoke tests
         run: node tests/script-smoke.test.js
