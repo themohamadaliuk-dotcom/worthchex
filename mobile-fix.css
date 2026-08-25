@@ -18,6 +18,18 @@ html, body {
     min-width: 0;
   }
 
+  /* Final mobile logo/header tuning — intentionally last so it overrides earlier nav rules. */
+  .nav-inner > .logo {
+    width: 184px !important;
+    height: 40px !important;
+    flex: 0 0 184px !important;
+    margin: 0 !important;
+    padding: 3px 0 !important;
+    background-size: 100% auto !important;
+    background-position: left center !important;
+    box-sizing: border-box !important;
+  }
+
   .hero {
     width: 100%;
     max-width: 100%;
@@ -66,5 +78,27 @@ html, body {
     justify-content: center;
     text-align: center;
     gap: 8px 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-inner {
+    padding: 6px 10px 8px;
+    gap: 8px;
+  }
+
+  .nav-inner > .logo {
+    width: 166px !important;
+    height: 38px !important;
+    flex-basis: 166px !important;
+    padding: 3px 0 !important;
+  }
+
+  .nav-links {
+    gap: 4px 7px;
+  }
+
+  .nav-links > a {
+    font-size: 9px;
   }
 }
