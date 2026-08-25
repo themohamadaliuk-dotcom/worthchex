@@ -26,7 +26,9 @@ assert.ok(W.takeHomePay(40000, { region: "scotland" }).net !== salary.net);
 
 assert.equal(W.sdlt(300000).tax, 5000);
 assert.equal(W.sdlt(500000, { firstTime: true }).tax, 10000);
-assert.equal(W.sdlt(500000, { firstTime: true, nonResident: true }).tax, 14000);
+// Non-resident surcharge adds 2 percentage points to the first-time buyer rates,
+// including the otherwise-zero first £300,000 band.
+assert.equal(W.sdlt(500000, { firstTime: true, nonResident: true }).tax, 20000);
 assert.ok(W.sdlt(500000, { additional: true }).tax > W.sdlt(500000).tax);
 
 const compound = W.compoundGrowth({
