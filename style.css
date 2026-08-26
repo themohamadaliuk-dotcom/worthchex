@@ -1,1 +1,57 @@
 @import url('./style-core.css');
+
+/* WORTHCHEX — FINAL CLEAN HEADER LOGO
+   The original logo artwork is used, but the header container is
+   deliberately cropped before the built-in slogan. No generated
+   slogan text or pseudo-element is used anywhere in the header. */
+.navbar .nav-inner > .logo {
+  width: 250px !important;
+  height: 44px !important;
+  flex: 0 0 250px !important;
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  background: url('assets/worthchex-logo.webp?v=20260826-pc-clean') left top / 100% auto no-repeat !important;
+  background-color: #fff !important;
+  image-rendering: auto;
+}
+
+.navbar .nav-inner > .logo::before,
+.navbar .nav-inner > .logo::after {
+  content: none !important;
+  display: none !important;
+}
+
+.navbar .nav-inner > .logo .logo-icon {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .navbar .nav-inner > .logo {
+    width: 230px !important;
+    height: 41px !important;
+    flex-basis: 230px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar .nav-inner > .logo {
+    width: 190px !important;
+    height: 34px !important;
+    flex-basis: 190px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar .nav-inner > .logo {
+    width: 176px !important;
+    height: 31px !important;
+    flex-basis: 176px !important;
+  }
+}
