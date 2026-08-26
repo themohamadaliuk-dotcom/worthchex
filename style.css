@@ -1,116 +1,57 @@
 @import url('./style-core.css');
 
-/* =========================================================
-   WORTHCHEX — RESPONSIVE MASTER LOGO
-   Original brand artwork with one clean, readable slogan.
-   The tiny slogan baked into the source artwork is covered
-   and replaced with one controlled vector-text slogan.
-   ========================================================= */
-
+/* WORTHCHEX — FINAL CLEAN HEADER LOGO
+   The original logo artwork is used, but the header container is
+   deliberately cropped before the built-in slogan. No generated
+   slogan text or pseudo-element is used anywhere in the header. */
 .navbar .nav-inner > .logo {
-  width: 270px;
-  height: 60px;
-  flex: 0 0 270px;
-  display: block;
-  position: relative;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  gap: 0;
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
-  background: url('assets/worthchex-logo.webp?v=20260826-logo-final') left top / 100% auto no-repeat;
-  background-color: #fff;
+  width: 250px !important;
+  height: 44px !important;
+  flex: 0 0 250px !important;
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  background: url('assets/worthchex-logo.webp?v=20260826-pc-clean') left top / 100% auto no-repeat !important;
+  background-color: #fff !important;
   image-rendering: auto;
+}
+
+.navbar .nav-inner > .logo::before,
+.navbar .nav-inner > .logo::after {
+  content: none !important;
+  display: none !important;
 }
 
 .navbar .nav-inner > .logo .logo-icon {
   display: none !important;
 }
 
-/* Hide the low-resolution slogan baked into the original artwork. */
-.navbar .nav-inner > .logo::before {
-  content: '';
-  position: absolute;
-  left: 24%;
-  right: 0;
-  bottom: 0;
-  height: 28%;
-  z-index: 1;
-  pointer-events: none;
-  background: #fff;
-}
-
-/* One clean slogan, sized to stay readable without dominating the mark. */
-.navbar .nav-inner > .logo::after {
-  content: 'MAKE SMARTER MONEY DECISIONS';
-  position: absolute;
-  left: 26%;
-  right: 1.5%;
-  bottom: 4px;
-  z-index: 2;
-  color: #111a3a;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 8.8px;
-  font-weight: 800;
-  letter-spacing: .055em;
-  line-height: 1;
-  white-space: nowrap;
-  text-align: center;
-  pointer-events: none;
-}
-
 @media (max-width: 900px) {
   .navbar .nav-inner > .logo {
-    width: 250px;
-    height: 55px;
-    flex-basis: 250px;
-  }
-
-  .navbar .nav-inner > .logo::after {
-    font-size: 8.2px;
+    width: 230px !important;
+    height: 41px !important;
+    flex-basis: 230px !important;
   }
 }
 
 @media (max-width: 700px) {
   .navbar .nav-inner > .logo {
-    width: 190px;
-    height: 42px;
-    flex-basis: 190px;
-  }
-
-  .navbar .nav-inner > .logo::before {
-    left: 23.5%;
-    height: 27%;
-  }
-
-  .navbar .nav-inner > .logo::after {
-    left: 25%;
-    right: 0;
-    bottom: 2px;
-    font-size: 7.6px;
-    letter-spacing: .018em;
+    width: 190px !important;
+    height: 34px !important;
+    flex-basis: 190px !important;
   }
 }
 
 @media (max-width: 420px) {
   .navbar .nav-inner > .logo {
-    width: 176px;
-    height: 39px;
-    flex-basis: 176px;
-  }
-
-  .navbar .nav-inner > .logo::before {
-    left: 23.5%;
-    height: 27%;
-  }
-
-  .navbar .nav-inner > .logo::after {
-    left: 24.5%;
-    right: 0;
-    bottom: 2px;
-    font-size: 7.1px;
-    letter-spacing: .012em;
+    width: 176px !important;
+    height: 31px !important;
+    flex-basis: 176px !important;
   }
 }
