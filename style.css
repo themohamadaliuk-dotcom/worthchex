@@ -1,66 +1,112 @@
 @import url('./style-core.css');
 
 /* =========================================================
-   WORTHCHEX — CLEAN LOGO WITHOUT TAGLINE
-   Use the proven master WebP directly and crop its built-in
-   tagline by container height. No SVG dependencies and no
-   generated/overlay text.
+   WORTHCHEX — RESPONSIVE MASTER LOGO
+   Uses the original master artwork and replaces only the
+   built-in tiny tagline with one clean, sharper version.
+   Desktop is slightly smaller; mobile keeps the compact
+   header while making the tagline easier to read.
    ========================================================= */
 
 .nav-inner > .logo {
-  width: 340px;
-  height: 60px;
-  flex: 0 0 340px;
+  width: 290px;
+  height: 64px;
+  flex: 0 0 290px;
   display: block;
+  position: relative;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   gap: 0;
   font-size: 0;
   line-height: 0;
   color: transparent;
-  background: url('assets/worthchex-logo.webp') left top / 100% auto no-repeat;
+  background: url('assets/worthchex-logo.webp?v=20260826-3') left top / 100% auto no-repeat;
   background-color: transparent;
-  overflow: hidden;
 }
 
 .nav-inner > .logo .logo-icon {
   display: none !important;
 }
 
-@media (max-width: 900px) {
-  .nav-inner {
-    padding: 7px 18px;
-  }
+/* Cover the original tiny tagline baked into the source artwork.
+   The new tagline and accent strokes sit inside this same white area. */
+.nav-inner > .logo::before {
+  content: '';
+  position: absolute;
+  left: 25%;
+  right: 0;
+  bottom: 0;
+  height: 22%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #6f22e8 0 18%, #354de1 18% 36%, #129be8 36% 54%, transparent 54%) left 55% / 14% 2px no-repeat,
+    linear-gradient(90deg, transparent 0 46%, #6f22e8 46% 64%, #354de1 64% 82%, #129be8 82% 100%) right 55% / 14% 2px no-repeat,
+    #fff;
+}
 
+.nav-inner > .logo::after {
+  content: 'MAKE SMARTER MONEY DECISIONS';
+  position: absolute;
+  left: 27%;
+  right: 2%;
+  bottom: 3px;
+  z-index: 2;
+  color: #111a3a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
   .nav-inner > .logo {
-    width: 285px;
-    height: 50px;
-    flex-basis: 285px;
+    width: 250px;
+    height: 55px;
+    flex-basis: 250px;
+  }
+  .nav-inner > .logo::after {
+    font-size: 9px;
   }
 }
 
 @media (max-width: 700px) {
-  .nav-inner {
-    padding: 3px 12px 4px;
-    gap: 8px;
-  }
-
   .nav-inner > .logo {
     width: 190px;
-    height: 34px;
+    height: 42px;
     flex-basis: 190px;
+  }
+  .nav-inner > .logo::before {
+    left: 24%;
+    height: 24%;
+  }
+  .nav-inner > .logo::after {
+    left: 26%;
+    right: 0;
+    bottom: 2px;
+    font-size: 7.2px;
+    letter-spacing: .025em;
   }
 }
 
 @media (max-width: 420px) {
-  .nav-inner {
-    padding: 2px 9px 3px;
-    gap: 6px;
-  }
-
   .nav-inner > .logo {
     width: 176px;
-    height: 32px;
+    height: 39px;
     flex-basis: 176px;
+  }
+  .nav-inner > .logo::before {
+    left: 24%;
+    height: 24%;
+  }
+  .nav-inner > .logo::after {
+    left: 25%;
+    right: 0;
+    font-size: 6.9px;
   }
 }
