@@ -6,14 +6,12 @@
   background: #fbfbfe;
 }
 
-/* Keep the navbar branding compact and balanced on the homepage. */
 .home-page .navbar .nav-inner > .logo {
   width: 190px !important;
   height: 34px !important;
   flex-basis: 190px !important;
 }
 
-/* Hero */
 .home-page .hero {
   max-width: none;
   min-height: 565px;
@@ -65,6 +63,7 @@
   line-height: 1;
 }
 
+/* Original WorthChex heading gradient — restored exactly. */
 .home-page .hero h1 {
   position: relative;
   z-index: 1;
@@ -73,6 +72,9 @@
   letter-spacing: -4.5px;
   line-height: 0.98;
   background: linear-gradient(135deg, #111522 10%, #302b8f 55%, #635bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .home-page .hero > p {
@@ -120,7 +122,6 @@
   box-shadow: 0 5px 16px rgba(99, 91, 255, 0.07);
 }
 
-/* First tool section: intro on the left, cards on the right. */
 .home-page .home-money-tools {
   max-width: 1180px;
   padding: 62px 24px 86px;
@@ -197,7 +198,6 @@
   line-height: 1.6;
 }
 
-/* Second section retains the existing full calculator suite but gets the same polish. */
 .home-page #all-calculators-preview {
   padding-top: 10px;
 }
