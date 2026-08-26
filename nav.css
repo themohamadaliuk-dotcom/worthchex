@@ -1,4 +1,8 @@
 .nav-inner{gap:20px}.nav-links{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap}.nav-links>a{position:relative;color:#626a7e;text-decoration:none;font-size:13px;font-weight:650;transition:color .2s ease}.nav-links>a:hover{color:#5148e5}.nav-all-calculators{font-weight:800!important;color:#5148e5!important}.nav-all-calculators:after{content:'→';display:inline-block;margin-left:5px;transition:transform .2s ease}.nav-all-calculators:hover:after{transform:translateX(3px)}
 
-@media(max-width:700px){.nav-inner{padding:3px 12px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}}
-@media(max-width:420px){.nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}}
+/* Use the original master artwork only; crop out its built-in tagline. */
+.nav-inner > .logo{overflow:hidden;background-position:left top!important}
+
+@media(max-width:900px){.nav-inner{padding:9px 18px}.nav-inner > .logo{height:50px}}
+@media(max-width:700px){.nav-inner{padding:3px 12px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}.nav-inner > .logo{height:31px;background-position:left top!important}}
+@media(max-width:420px){.nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}.nav-inner > .logo{height:29px;background-position:left top!important}}
