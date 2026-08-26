@@ -1,14 +1,15 @@
 @import url('./style-core.css');
 
 /* =========================================================
-   WORTHCHEX — CLEAN MASTER BRAND LOGO
-   Uses a dedicated SVG master so the original mark stays
-   crisp while the tagline remains a single, sharp element.
+   WORTHCHEX — CLEAN LOGO WITHOUT TAGLINE
+   Uses a dedicated cropped master asset. There is no tagline
+   text in CSS and no overlay, so the logo is identical on
+   desktop and mobile apart from responsive sizing.
    ========================================================= */
 
 .nav-inner > .logo {
   width: 340px;
-  height: 75px;
+  height: 63px;
   flex: 0 0 340px;
   display: block;
   margin: 0;
@@ -17,7 +18,7 @@
   font-size: 0;
   line-height: 0;
   color: transparent;
-  background: url('assets/worthchex-logo-clean.svg') left center / 100% auto no-repeat;
+  background: url('assets/worthchex-logo-no-tagline.svg?v=20260826') left top / 100% 100% no-repeat;
   background-color: transparent;
   image-rendering: auto;
 }
@@ -33,7 +34,7 @@
 
   .nav-inner > .logo {
     width: 285px;
-    height: 62px;
+    height: 53px;
     flex-basis: 285px;
   }
 }
@@ -46,10 +47,8 @@
 
   .nav-inner > .logo {
     width: 190px;
-    height: 42px;
+    height: 35px;
     flex-basis: 190px;
-    background-size: 100% auto;
-    background-position: left center;
   }
 }
 
@@ -61,7 +60,7 @@
 
   .nav-inner > .logo {
     width: 176px;
-    height: 39px;
+    height: 33px;
     flex-basis: 176px;
   }
 }
