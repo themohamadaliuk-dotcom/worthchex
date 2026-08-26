@@ -4,8 +4,9 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 @media (max-width:700px) {
   .navbar { width:100%; max-width:100%; overflow:hidden; background:#fff; }
   .nav-inner { width:100%; max-width:100%; min-width:0; box-sizing:border-box; padding:7px 12px 8px !important; gap:8px !important; align-items:center !important; }
-  .nav-inner > .logo { width:180px !important; height:32px !important; flex:0 1 180px !important; min-width:0 !important; margin:0 !important; padding:0 !important; display:block !important; box-sizing:border-box !important; background-image:url('assets/worthchex-logo.webp?v=20260826-size2') !important; background-size:100% auto !important; background-position:left top !important; background-repeat:no-repeat !important; overflow:hidden !important; }
+  .nav-inner > .logo { width:180px !important; height:32px !important; flex:0 1 180px !important; min-width:0 !important; margin:0 !important; padding:0 !important; display:block !important; box-sizing:border-box !important; background-image:url('assets/worthchex-logo-clean.svg?v=20260826-final') !important; background-size:100% 100% !important; background-position:left top !important; background-repeat:no-repeat !important; overflow:hidden !important; background-color:#fff !important; font-size:0 !important; color:transparent !important; }
   .nav-inner > .logo::before,.nav-inner > .logo::after { content:none !important; display:none !important; }
+  .nav-inner > .logo .logo-icon { display:none !important; }
   .nav-links { min-width:0; flex:1 1 auto; align-items:center !important; }
   .hero { width:100%; max-width:100%; margin:0; padding:58px 16px 48px; text-align:center !important; overflow:hidden; }
   .hero::before { width:340px; height:340px; left:50%; transform:translateX(-50%); }
