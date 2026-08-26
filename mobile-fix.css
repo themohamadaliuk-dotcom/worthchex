@@ -1,140 +1,28 @@
 /* WorthChex mobile layout fixes */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+
+@media (max-width:700px) {
+  .navbar { width:100%; max-width:100%; overflow:hidden; background:#fff; }
+  .nav-inner { width:100%; max-width:100%; min-width:0; box-sizing:border-box; padding:7px 12px 8px !important; gap:8px !important; align-items:center !important; }
+  .nav-inner > .logo { width:180px !important; height:32px !important; flex:0 1 180px !important; min-width:0 !important; margin:0 !important; padding:0 !important; display:block !important; box-sizing:border-box !important; background-image:url('assets/worthchex-logo.webp?v=20260826-size2') !important; background-size:100% auto !important; background-position:left top !important; background-repeat:no-repeat !important; overflow:hidden !important; }
+  .nav-inner > .logo::before,.nav-inner > .logo::after { content:none !important; display:none !important; }
+  .nav-links { min-width:0; flex:1 1 auto; align-items:center !important; }
+  .hero { width:100%; max-width:100%; margin:0; padding:58px 16px 48px; text-align:center !important; overflow:hidden; }
+  .hero::before { width:340px; height:340px; left:50%; transform:translateX(-50%); }
+  .hero h1 { width:100%; max-width:340px; margin:0 auto; text-align:center !important; font-size:clamp(38px,10.8vw,50px); line-height:1.04; letter-spacing:-2.4px; text-wrap:balance; }
+  .hero > p { width:100%; max-width:335px; margin:20px auto 24px; text-align:center !important; font-size:16px; line-height:1.6; }
+  .hero-badge,.trust-points { margin-left:auto; margin-right:auto; }
+  .trust-points { width:100%; max-width:335px; justify-content:center; text-align:center; gap:8px 14px; }
 }
 
-@media (max-width: 700px) {
-  .navbar {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    background: #fff;
-  }
-
-  .nav-inner {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    padding: 8px 12px 9px !important;
-    gap: 9px !important;
-    align-items: center !important;
-  }
-
-  /* Final mobile logo: keep only the clean WorthChex mark and crop the
-     slogan area completely. nav.css disables all pseudo-element text. */
-  .nav-inner > .logo {
-    width: 190px !important;
-    height: 34px !important;
-    flex: 0 1 190px !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    box-sizing: border-box !important;
-    background-image: url('assets/worthchex-logo.webp?v=20260826-noslogan') !important;
-    background-size: 100% auto !important;
-    background-position: left top !important;
-    background-repeat: no-repeat !important;
-    overflow: hidden !important;
-  }
-
-  .nav-inner > .logo::before,
-  .nav-inner > .logo::after {
-    content: none !important;
-    display: none !important;
-  }
-
-  .nav-links {
-    min-width: 0;
-    flex: 1 1 auto;
-    align-items: center !important;
-  }
-
-  .hero {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 58px 16px 48px;
-    text-align: center !important;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    width: 340px;
-    height: 340px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .hero h1 {
-    width: 100%;
-    max-width: 340px;
-    margin: 0 auto;
-    text-align: center !important;
-    font-size: clamp(38px, 10.8vw, 50px);
-    line-height: 1.04;
-    letter-spacing: -2.4px;
-    text-wrap: balance;
-  }
-
-  .hero > p {
-    width: 100%;
-    max-width: 335px;
-    margin: 20px auto 24px;
-    text-align: center !important;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  .hero-badge,
-  .trust-points {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .trust-points {
-    width: 100%;
-    max-width: 335px;
-    justify-content: center;
-    text-align: center;
-    gap: 8px 14px;
-  }
+@media (max-width:420px) {
+  .nav-inner { padding:6px 10px 7px !important; gap:7px !important; }
+  .nav-inner > .logo { width:166px !important; height:30px !important; flex-basis:166px !important; }
+  .nav-links { gap:4px 7px; }
+  .nav-links > a { font-size:9px; }
 }
 
-@media (max-width: 420px) {
-  .nav-inner {
-    padding: 7px 10px 8px !important;
-    gap: 7px !important;
-  }
-
-  .nav-inner > .logo {
-    width: 176px !important;
-    height: 32px !important;
-    flex-basis: 176px !important;
-  }
-
-  .nav-links {
-    gap: 4px 7px;
-  }
-
-  .nav-links > a {
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 360px) {
-  .nav-inner {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    gap: 6px !important;
-  }
-
-  .nav-inner > .logo {
-    width: 158px !important;
-    height: 30px !important;
-    flex-basis: 158px !important;
-  }
+@media (max-width:360px) {
+  .nav-inner { padding-left:8px !important; padding-right:8px !important; gap:6px !important; }
+  .nav-inner > .logo { width:158px !important; height:29px !important; flex-basis:158px !important; }
 }
