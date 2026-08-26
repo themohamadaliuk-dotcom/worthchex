@@ -1,10 +1,4 @@
 .nav-inner{gap:20px}.nav-links{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap}.nav-links>a{position:relative;color:#626a7e;text-decoration:none;font-size:13px;font-weight:650;transition:color .2s ease}.nav-links>a:hover{color:#5148e5}.nav-all-calculators{font-weight:800!important;color:#5148e5!important}.nav-all-calculators:after{content:'→';display:inline-block;margin-left:5px;transition:transform .2s ease}.nav-all-calculators:hover:after{transform:translateX(3px)}
 
-/* Crisp, single visible tagline: cover the tiny tagline baked into the source image, then render one larger, sharp version in its place. */
-.nav-inner > .logo{position:relative;overflow:hidden}
-.nav-inner > .logo::before{content:'';position:absolute;left:23%;right:0;bottom:0;height:15px;background:#fff;z-index:1;pointer-events:none}
-.nav-inner > .logo::after{content:'MAKE SMARTER MONEY DECISIONS';position:absolute;left:25%;right:1%;bottom:2px;z-index:2;color:#111a3a;font-size:9px;font-weight:800;letter-spacing:.085em;line-height:1;white-space:nowrap;text-align:center;font-family:Arial,Helvetica,sans-serif;pointer-events:none}
-
-@media(max-width:900px){.nav-inner{padding:9px 18px}.nav-inner > .logo::before{height:13px}.nav-inner > .logo::after{font-size:8.2px;bottom:2px}}
-@media(max-width:700px){.nav-inner{padding:4px 12px 5px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}.nav-inner > .logo{width:190px;height:38px;flex-basis:190px;background-size:100% auto;background-position:left center}.nav-inner > .logo::before{height:10px;left:23%}.nav-inner > .logo::after{font-size:7px;letter-spacing:.08em;bottom:1.5px}}
-@media(max-width:420px){.nav-inner{padding:3px 9px 4px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}.nav-inner > .logo{width:176px;height:35px;flex-basis:176px}.nav-inner > .logo::before{height:9px}.nav-inner > .logo::after{font-size:6.4px;letter-spacing:.07em;bottom:1.5px}}
+@media(max-width:700px){.nav-inner{padding:3px 12px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}}
+@media(max-width:420px){.nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}}
