@@ -1,11 +1,12 @@
 .nav-inner{gap:20px}.nav-links{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap}.nav-links>a{position:relative;color:#626a7e;text-decoration:none;font-size:13px;font-weight:650;transition:color .2s ease}.nav-links>a:hover{color:#5148e5}.nav-all-calculators{font-weight:800!important;color:#5148e5!important}.nav-all-calculators:after{content:'→';display:inline-block;margin-left:5px;transition:transform .2s ease}.nav-all-calculators:hover:after{transform:translateX(3px)}
 
-/* Final logo decision: remove the slogan completely. The base logo is cropped
-   before the tagline, and all older pseudo-element slogan rules are disabled. */
-.navbar .nav-inner > .logo{width:270px!important;height:48px!important;flex:0 0 270px!important;display:block;position:relative;overflow:hidden;background-image:url('assets/worthchex-logo.webp?v=20260826-noslogan')!important;background-position:left top!important;background-size:100% auto!important;background-repeat:no-repeat!important;background-color:#fff!important;font-size:0!important;line-height:0!important;color:transparent!important}
+/* Final logo treatment: show only the upper WorthChex master artwork.
+   The source artwork contains the slogan lower down, so the container is
+   deliberately shorter than the full image to crop it completely. */
+.navbar .nav-inner > .logo{width:250px!important;height:44px!important;flex:0 0 250px!important;display:block;position:relative;overflow:hidden;background-image:url('assets/worthchex-logo.webp?v=20260826-noslogan2')!important;background-position:left top!important;background-size:100% auto!important;background-repeat:no-repeat!important;background-color:#fff!important;font-size:0!important;line-height:0!important;color:transparent!important}
 .navbar .nav-inner > .logo::before,.navbar .nav-inner > .logo::after{content:none!important;display:none!important}
 .navbar .nav-inner > .logo .logo-icon{display:none!important}
 
-@media(max-width:900px){.navbar .nav-inner{padding:7px 18px}.navbar .nav-inner > .logo{width:240px!important;height:43px!important;flex-basis:240px!important}}
+@media(max-width:900px){.navbar .nav-inner{padding:7px 18px}.navbar .nav-inner > .logo{width:230px!important;height:41px!important;flex-basis:230px!important}}
 @media(max-width:700px){.navbar .nav-inner{padding:3px 12px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}.navbar .nav-inner > .logo{width:190px!important;height:34px!important;flex-basis:190px!important;background-position:left top!important}}
-@media(max-width:420px){.navbar .nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}.navbar .nav-inner > .logo{width:176px!important;height:32px!important;flex-basis:176px!important}}
+@media(max-width:420px){.navbar .nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}.navbar .nav-inner > .logo{width:176px!important;height:31px!important;flex-basis:176px!important}}
