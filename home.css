@@ -2,333 +2,124 @@
    WORTHCHEX HOME — POLISHED FINTECH LANDING PAGE
    ========================================================= */
 
-.home-page {
-  background: #fbfbfe;
-}
-
-.home-page .navbar .nav-inner > .logo {
-  width: 190px !important;
-  height: 34px !important;
-  flex-basis: 190px !important;
-}
+.home-page { background: #fbfbfe; }
+.home-page .navbar .nav-inner > .logo { width:190px !important; height:34px !important; flex-basis:190px !important; }
 
 .home-page .hero {
-  max-width: none;
-  min-height: 565px;
-  padding: 82px 24px 76px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  max-width:none;
+  min-height:565px;
+  padding:82px 24px 76px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  isolation:isolate;
   background:
-    radial-gradient(circle at 50% 20%, rgba(111, 100, 255, 0.10), transparent 42%),
-    linear-gradient(180deg, #fafaff 0%, #f7f7ff 58%, #f4f4fc 100%);
+    radial-gradient(circle at 50% 20%, rgba(111,100,255,.10), transparent 42%),
+    linear-gradient(180deg,#fafaff 0%,#f7f7ff 58%,#f4f4fc 100%);
 }
 
 .home-page .hero::before {
-  width: 620px;
-  height: 620px;
-  top: -110px;
-  background:
-    radial-gradient(circle, rgba(99, 91, 255, 0.13) 0%, rgba(99, 91, 255, 0.055) 34%, transparent 70%);
+  width:620px;
+  height:620px;
+  top:-110px;
+  z-index:-1;
+  background:radial-gradient(circle,rgba(99,91,255,.13) 0%,rgba(99,91,255,.055) 34%,transparent 70%);
 }
 
 .home-page .hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
   background:
-    radial-gradient(ellipse at 0% 58%, rgba(114, 103, 255, 0.07), transparent 22%),
-    radial-gradient(ellipse at 100% 58%, rgba(114, 103, 255, 0.07), transparent 22%);
+    radial-gradient(ellipse at 0% 58%,rgba(114,103,255,.07),transparent 22%),
+    radial-gradient(ellipse at 100% 58%,rgba(114,103,255,.07),transparent 22%);
 }
 
 .home-page .hero-badge {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 28px;
-  padding: 9px 16px;
-  gap: 9px;
-  background: rgba(99, 91, 255, 0.075);
-  border-color: rgba(99, 91, 255, 0.13);
-  color: #5148e5;
-  box-shadow: 0 7px 24px rgba(99, 91, 255, 0.07);
+  position:relative;
+  z-index:2;
+  margin-bottom:28px;
+  padding:9px 16px;
+  gap:9px;
+  background:rgba(99,91,255,.075);
+  border-color:rgba(99,91,255,.13);
+  color:#5148e5;
+  box-shadow:0 7px 24px rgba(99,91,255,.07);
 }
+.home-page .hero-badge::before { content:"▦"; display:inline-block; font-size:13px; line-height:1; }
 
-.home-page .hero-badge::before {
-  content: "▦";
-  display: inline-block;
-  font-size: 13px;
-  line-height: 1;
-}
-
-/* Original WorthChex heading gradient — restored exactly. */
+/* Original WorthChex blue-faded heading, with explicit browser-safe text clipping. */
 .home-page .hero h1 {
-  position: relative;
-  z-index: 1;
-  max-width: 820px;
-  font-size: clamp(48px, 6.4vw, 78px);
-  letter-spacing: -4.5px;
-  line-height: 0.98;
-  background: linear-gradient(135deg, #111522 10%, #302b8f 55%, #635bff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  position:relative;
+  z-index:2;
+  max-width:820px;
+  font-size:clamp(48px,6.4vw,78px);
+  letter-spacing:-4.5px;
+  line-height:.98;
+  margin:0 auto;
+  background-image:linear-gradient(135deg,#111522 10%,#302b8f 55%,#635bff 100%);
+  background-color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  display:block;
 }
 
-.home-page .hero > p {
-  position: relative;
-  z-index: 1;
-  max-width: 760px;
-  margin: 26px auto 32px;
-  color: #667089;
-  font-size: 18px;
-  line-height: 1.55;
-}
+.home-page .hero > p { position:relative; z-index:2; max-width:760px; margin:26px auto 32px; color:#667089; font-size:18px; line-height:1.55; }
+.home-page .hero > p span { display:block; margin-top:3px; }
+.home-page .hero > p strong { color:#5148e5; font-weight:750; }
+.home-page .trust-points { position:relative; z-index:2; gap:14px 34px; color:#1c2540; font-size:13px; font-weight:750; }
+.home-page .trust-points span::before { content:"✓"; width:30px; height:30px; margin-right:9px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:#eeedff; color:#564ee9; font-size:15px; font-weight:900; box-shadow:0 5px 16px rgba(99,91,255,.07); }
 
-.home-page .hero > p span {
-  display: block;
-  margin-top: 3px;
-}
+.home-page .home-money-tools { max-width:1180px; padding:62px 24px 86px; display:grid; grid-template-columns:minmax(300px,.9fr) minmax(0,1.7fr); column-gap:48px; align-items:start; }
+.home-page .home-money-tools > .step { grid-column:1; grid-row:1; padding-top:5px; }
+.home-page .home-money-tools > h2 { grid-column:1; grid-row:2; margin:12px 0 12px; font-size:38px; line-height:1.08; }
+.home-page .home-money-tools > p { grid-column:1; grid-row:3; max-width:430px; margin:0; font-size:16px; }
+.home-page .home-money-tools > .tool-grid { grid-column:2; grid-row:1 / span 3; margin-top:0; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.home-page .home-money-tools .tool-card { min-height:235px; padding:24px; border-color:#e9eaf2; border-radius:20px; box-shadow:0 18px 48px rgba(32,38,80,.065); }
+.home-page .home-money-tools .tool-card-icon { width:54px; height:54px; margin-bottom:10px; border-radius:17px; background:#f1efff; color:#635bff; font-size:22px; }
+.home-page .home-money-tools .tool-card:nth-child(2) .tool-card-icon { background:#eff6ff; color:#2384ff; }
+.home-page .home-money-tools .tool-card:nth-child(3) .tool-card-icon { background:#ebfbf4; color:#16a97b; }
+.home-page .home-money-tools .tool-card strong { font-size:17px; }
+.home-page .home-money-tools .tool-card span:last-child { font-size:13px; line-height:1.6; }
+.home-page #all-calculators-preview { padding-top:10px; }
+.home-page #all-calculators-preview .tool-card { border-radius:18px; }
 
-.home-page .hero > p strong {
-  color: #5148e5;
-  font-weight: 750;
-}
-
-.home-page .trust-points {
-  position: relative;
-  z-index: 1;
-  gap: 14px 34px;
-  color: #1c2540;
-  font-size: 13px;
-  font-weight: 750;
-}
-
-.home-page .trust-points span::before {
-  content: "✓";
-  width: 30px;
-  height: 30px;
-  margin-right: 9px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #eeedff;
-  color: #564ee9;
-  font-size: 15px;
-  font-weight: 900;
-  box-shadow: 0 5px 16px rgba(99, 91, 255, 0.07);
-}
-
-.home-page .home-money-tools {
-  max-width: 1180px;
-  padding: 62px 24px 86px;
-  display: grid;
-  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.7fr);
-  column-gap: 48px;
-  align-items: start;
-}
-
-.home-page .home-money-tools > .step {
-  grid-column: 1;
-  grid-row: 1;
-  padding-top: 5px;
-}
-
-.home-page .home-money-tools > h2 {
-  grid-column: 1;
-  grid-row: 2;
-  margin: 12px 0 12px;
-  font-size: 38px;
-  line-height: 1.08;
-}
-
-.home-page .home-money-tools > p {
-  grid-column: 1;
-  grid-row: 3;
-  max-width: 430px;
-  margin: 0;
-  font-size: 16px;
-}
-
-.home-page .home-money-tools > .tool-grid {
-  grid-column: 2;
-  grid-row: 1 / span 3;
-  margin-top: 0;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.home-page .home-money-tools .tool-card {
-  min-height: 235px;
-  padding: 24px;
-  border-color: #e9eaf2;
-  border-radius: 20px;
-  box-shadow: 0 18px 48px rgba(32, 38, 80, 0.065);
-}
-
-.home-page .home-money-tools .tool-card-icon {
-  width: 54px;
-  height: 54px;
-  margin-bottom: 10px;
-  border-radius: 17px;
-  background: #f1efff;
-  color: #635bff;
-  font-size: 22px;
-}
-
-.home-page .home-money-tools .tool-card:nth-child(2) .tool-card-icon {
-  background: #eff6ff;
-  color: #2384ff;
-}
-
-.home-page .home-money-tools .tool-card:nth-child(3) .tool-card-icon {
-  background: #ebfbf4;
-  color: #16a97b;
-}
-
-.home-page .home-money-tools .tool-card strong {
-  font-size: 17px;
-}
-
-.home-page .home-money-tools .tool-card span:last-child {
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.home-page #all-calculators-preview {
-  padding-top: 10px;
-}
-
-.home-page #all-calculators-preview .tool-card {
-  border-radius: 18px;
-}
-
-@media (max-width: 900px) {
-  .home-page .navbar .nav-inner > .logo {
-    width: 170px !important;
-    height: 31px !important;
-    flex-basis: 170px !important;
-  }
-
-  .home-page .hero {
-    min-height: 520px;
-    padding: 70px 20px 62px;
-  }
-
-  .home-page .hero h1 {
-    max-width: 760px;
-    font-size: clamp(44px, 7.2vw, 70px);
-  }
-
-  .home-page .home-money-tools {
-    grid-template-columns: 1fr;
-    row-gap: 28px;
-  }
-
+@media (max-width:900px) {
+  .home-page .navbar .nav-inner > .logo { width:170px !important; height:31px !important; flex-basis:170px !important; }
+  .home-page .hero { min-height:520px; padding:70px 20px 62px; }
+  .home-page .hero h1 { max-width:760px; font-size:clamp(44px,7.2vw,70px); }
+  .home-page .home-money-tools { grid-template-columns:1fr; row-gap:28px; }
   .home-page .home-money-tools > .step,
   .home-page .home-money-tools > h2,
   .home-page .home-money-tools > p,
-  .home-page .home-money-tools > .tool-grid {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .home-page .home-money-tools > .tool-grid {
-    margin-top: 4px;
-  }
+  .home-page .home-money-tools > .tool-grid { grid-column:1; grid-row:auto; }
+  .home-page .home-money-tools > .tool-grid { margin-top:4px; }
 }
 
-@media (max-width: 700px) {
-  .home-page .navbar .nav-inner > .logo {
-    width: 150px !important;
-    height: 27px !important;
-    flex-basis: 150px !important;
-  }
-
-  .home-page .hero {
-    min-height: 0;
-    padding: 60px 16px 50px;
-  }
-
-  .home-page .hero::after {
-    background:
-      radial-gradient(ellipse at 0% 60%, rgba(114, 103, 255, 0.06), transparent 24%),
-      radial-gradient(ellipse at 100% 60%, rgba(114, 103, 255, 0.06), transparent 24%);
-  }
-
-  .home-page .hero-badge {
-    margin-bottom: 22px;
-    font-size: 9px;
-    letter-spacing: 1.3px;
-  }
-
-  .home-page .hero h1 {
-    max-width: 340px;
-    font-size: clamp(42px, 12vw, 54px);
-    letter-spacing: -2.8px;
-    line-height: 1;
-  }
-
-  .home-page .hero > p {
-    max-width: 335px;
-    margin: 21px auto 27px;
-    font-size: 15px;
-    line-height: 1.55;
-  }
-
-  .home-page .trust-points {
-    gap: 9px 16px;
-    max-width: 350px;
-    font-size: 12px;
-  }
-
-  .home-page .trust-points span::before {
-    width: 26px;
-    height: 26px;
-    margin-right: 7px;
-    font-size: 13px;
-  }
-
-  .home-page .home-money-tools {
-    padding: 48px 16px 64px;
-    row-gap: 20px;
-  }
-
-  .home-page .home-money-tools > h2 {
-    font-size: 34px;
-  }
-
-  .home-page .home-money-tools > p {
-    font-size: 15px;
-  }
-
-  .home-page .home-money-tools > .tool-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .home-page .home-money-tools .tool-card {
-    min-height: 0;
-  }
+@media (max-width:700px) {
+  .home-page .navbar .nav-inner > .logo { width:150px !important; height:27px !important; flex-basis:150px !important; }
+  .home-page .hero { min-height:0; padding:60px 16px 50px; }
+  .home-page .hero::after { background:radial-gradient(ellipse at 0% 60%,rgba(114,103,255,.06),transparent 24%),radial-gradient(ellipse at 100% 60%,rgba(114,103,255,.06),transparent 24%); }
+  .home-page .hero-badge { margin-bottom:22px; font-size:9px; letter-spacing:1.3px; }
+  .home-page .hero h1 { max-width:340px; font-size:clamp(42px,12vw,54px); letter-spacing:-2.8px; line-height:1; }
+  .home-page .hero > p { max-width:335px; margin:21px auto 27px; font-size:15px; line-height:1.55; }
+  .home-page .trust-points { gap:9px 16px; max-width:350px; font-size:12px; }
+  .home-page .trust-points span::before { width:26px; height:26px; margin-right:7px; font-size:13px; }
+  .home-page .home-money-tools { padding:48px 16px 64px; row-gap:20px; }
+  .home-page .home-money-tools > h2 { font-size:34px; }
+  .home-page .home-money-tools > p { font-size:15px; }
+  .home-page .home-money-tools > .tool-grid { grid-template-columns:1fr; gap:14px; }
+  .home-page .home-money-tools .tool-card { min-height:0; }
 }
 
-@media (max-width: 420px) {
-  .home-page .navbar .nav-inner > .logo {
-    width: 142px !important;
-    height: 26px !important;
-    flex-basis: 142px !important;
-  }
-
-  .home-page .hero {
-    padding-top: 50px;
-  }
-
-  .home-page .hero h1 {
-    max-width: 315px;
-    font-size: 39px;
-    letter-spacing: -2.2px;
-  }
+@media (max-width:420px) {
+  .home-page .navbar .nav-inner > .logo { width:142px !important; height:26px !important; flex-basis:142px !important; }
+  .home-page .hero { padding-top:50px; }
+  .home-page .hero h1 { max-width:315px; font-size:39px; letter-spacing:-2.2px; }
 }
