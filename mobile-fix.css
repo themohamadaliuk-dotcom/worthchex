@@ -23,21 +23,28 @@ html, body {
     align-items: center !important;
   }
 
-  /* Keep the compact single-row header. The master logo itself
-     handles the slogan; no mobile override recreates any text. */
+  /* Final mobile logo: keep only the clean WorthChex mark and crop the
+     slogan area completely. nav.css disables all pseudo-element text. */
   .nav-inner > .logo {
     width: 190px !important;
-    height: 42px !important;
+    height: 34px !important;
     flex: 0 1 190px !important;
     min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     display: block !important;
     box-sizing: border-box !important;
+    background-image: url('assets/worthchex-logo.webp?v=20260826-noslogan') !important;
     background-size: 100% auto !important;
     background-position: left top !important;
     background-repeat: no-repeat !important;
     overflow: hidden !important;
+  }
+
+  .nav-inner > .logo::before,
+  .nav-inner > .logo::after {
+    content: none !important;
+    display: none !important;
   }
 
   .nav-links {
@@ -105,7 +112,7 @@ html, body {
 
   .nav-inner > .logo {
     width: 176px !important;
-    height: 39px !important;
+    height: 32px !important;
     flex-basis: 176px !important;
   }
 
@@ -127,7 +134,7 @@ html, body {
 
   .nav-inner > .logo {
     width: 158px !important;
-    height: 36px !important;
+    height: 30px !important;
     flex-basis: 158px !important;
   }
 }
