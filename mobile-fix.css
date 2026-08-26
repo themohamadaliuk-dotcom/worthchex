@@ -23,9 +23,9 @@ html, body {
     align-items: center !important;
   }
 
-  /* Final mobile brand treatment. The extra vertical room is intentional:
-     it gives the white header a little more breathing space without making
-     the logo itself look oversized. */
+  /* Keep the compact mobile footprint, but use the new responsive master
+     logo at the exact dimensions below. The logo's own CSS handles the
+     cleaner, larger tagline and covers the original tiny source tagline. */
   .nav-inner > .logo {
     width: 184px !important;
     height: 44px !important;
@@ -36,7 +36,7 @@ html, body {
     display: block !important;
     box-sizing: border-box !important;
     background-size: 100% auto !important;
-    background-position: left center !important;
+    background-position: left top !important;
     background-repeat: no-repeat !important;
   }
 
