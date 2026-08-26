@@ -4,9 +4,9 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 @media (max-width:700px) {
   .navbar { width:100%; max-width:100%; overflow:hidden; background:#fff; }
   .nav-inner { width:100%; max-width:100%; min-width:0; box-sizing:border-box; padding:7px 12px 8px !important; gap:8px !important; align-items:center !important; }
-  .nav-inner > .logo { width:180px !important; height:32px !important; flex:0 1 180px !important; min-width:0 !important; margin:0 !important; padding:0 !important; display:block !important; box-sizing:border-box !important; background-image:url('assets/worthchex-logo-clean.svg?v=20260826-final') !important; background-size:100% 100% !important; background-position:left top !important; background-repeat:no-repeat !important; overflow:hidden !important; background-color:#fff !important; font-size:0 !important; color:transparent !important; }
+  .nav-inner > .logo { width:180px !important; height:32px !important; flex:0 1 180px !important; min-width:0 !important; margin:0 !important; padding:0 !important; display:flex !important; align-items:center !important; gap:10px !important; box-sizing:border-box !important; background:none !important; overflow:visible !important; font-size:21px !important; line-height:normal !important; color:#151827 !important; text-decoration:none !important; }
   .nav-inner > .logo::before,.nav-inner > .logo::after { content:none !important; display:none !important; }
-  .nav-inner > .logo .logo-icon { display:none !important; }
+  .nav-inner > .logo .logo-icon { display:flex !important; flex:0 0 36px !important; width:36px !important; height:36px !important; align-items:center !important; justify-content:center !important; border-radius:11px !important; background:linear-gradient(135deg,#635bff,#5148e5) !important; color:#fff !important; font-size:17px !important; font-weight:800 !important; }
   .nav-links { min-width:0; flex:1 1 auto; align-items:center !important; }
   .hero { width:100%; max-width:100%; margin:0; padding:58px 16px 48px; text-align:center !important; overflow:hidden; }
   .hero::before { width:340px; height:340px; left:50%; transform:translateX(-50%); }
@@ -18,7 +18,8 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
 @media (max-width:420px) {
   .nav-inner { padding:6px 10px 7px !important; gap:7px !important; }
-  .nav-inner > .logo { width:166px !important; height:30px !important; flex-basis:166px !important; }
+  .nav-inner > .logo { width:166px !important; height:30px !important; flex-basis:166px !important; font-size:19px !important; gap:8px !important; }
+  .nav-inner > .logo .logo-icon { width:32px !important; height:32px !important; flex-basis:32px !important; border-radius:10px !important; font-size:15px !important; }
   .nav-links { gap:4px 7px; }
   .nav-links > a { font-size:9px; }
 }
