@@ -2,14 +2,14 @@
 
 /* =========================================================
    WORTHCHEX — CLEAN LOGO WITHOUT TAGLINE
-   Uses a dedicated cropped master asset. There is no tagline
-   text in CSS and no overlay, so the logo is identical on
-   desktop and mobile apart from responsive sizing.
+   Use the proven master WebP directly and crop its built-in
+   tagline by container height. No SVG dependencies and no
+   generated/overlay text.
    ========================================================= */
 
 .nav-inner > .logo {
   width: 340px;
-  height: 63px;
+  height: 60px;
   flex: 0 0 340px;
   display: block;
   margin: 0;
@@ -18,9 +18,9 @@
   font-size: 0;
   line-height: 0;
   color: transparent;
-  background: url('assets/worthchex-logo-no-tagline.svg?v=20260826') left top / 100% 100% no-repeat;
+  background: url('assets/worthchex-logo.webp') left top / 100% auto no-repeat;
   background-color: transparent;
-  image-rendering: auto;
+  overflow: hidden;
 }
 
 .nav-inner > .logo .logo-icon {
@@ -34,7 +34,7 @@
 
   .nav-inner > .logo {
     width: 285px;
-    height: 53px;
+    height: 50px;
     flex-basis: 285px;
   }
 }
@@ -47,7 +47,7 @@
 
   .nav-inner > .logo {
     width: 190px;
-    height: 35px;
+    height: 34px;
     flex-basis: 190px;
   }
 }
@@ -60,7 +60,7 @@
 
   .nav-inner > .logo {
     width: 176px;
-    height: 33px;
+    height: 32px;
     flex-basis: 176px;
   }
 }
