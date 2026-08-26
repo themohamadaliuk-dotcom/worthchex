@@ -16,16 +16,11 @@
   overflow:hidden;
   isolation:isolate;
   background:
-    radial-gradient(circle at 50% 20%, rgba(111,100,255,.10), transparent 42%),
     linear-gradient(180deg,#fafaff 0%,#f7f7ff 58%,#f4f4fc 100%);
 }
 
 .home-page .hero::before {
-  width:620px;
-  height:620px;
-  top:-110px;
-  z-index:-1;
-  background:radial-gradient(circle,rgba(99,91,255,.13) 0%,rgba(99,91,255,.055) 34%,transparent 70%);
+  display:none !important;
 }
 
 .home-page .hero::after {
@@ -105,7 +100,7 @@
 @media (max-width:700px) {
   .home-page .navbar .nav-inner > .logo { width:150px !important; height:27px !important; flex-basis:150px !important; }
   .home-page .hero { min-height:0; padding:60px 16px 50px; }
-  .home-page .hero::after { background:radial-gradient(ellipse at 0% 60%,rgba(114,103,255,.06),transparent 24%),radial-gradient(ellipse at 100% 60%,rgba(114,103,255,.06),transparent 24%); }
+  .home-page .hero::after { background:transparent; }
   .home-page .hero-badge { margin-bottom:22px; font-size:9px; letter-spacing:1.3px; }
   .home-page .hero h1 { max-width:340px; font-size:clamp(42px,12vw,54px); letter-spacing:-2.8px; line-height:1; }
   .home-page .hero > p { max-width:335px; margin:21px auto 27px; font-size:15px; line-height:1.55; }
