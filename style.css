@@ -2,14 +2,15 @@
 
 /* =========================================================
    WORTHCHEX — BRAND LOGO / RESPONSIVE NAV OVERRIDE
-   Supplied master logo, tuned for crisp rendering and a
-   compact mobile header.
+   Uses the original supplied master logo. The complete logo,
+   including its original tagline, is rendered larger rather
+   than duplicating or recreating the tagline with CSS.
    ========================================================= */
 
 .nav-inner > .logo {
-  width: 268px;
-  height: 52px;
-  flex: 0 0 268px;
+  width: 320px;
+  height: 64px;
+  flex: 0 0 320px;
   display: block;
   margin: 0;
   padding: 0;
@@ -28,27 +29,27 @@
 
 @media (max-width: 900px) {
   .nav-inner {
-    padding: 11px 18px;
+    padding: 9px 18px;
   }
 
   .nav-inner > .logo {
-    width: 230px;
-    height: 46px;
-    flex-basis: 230px;
+    width: 270px;
+    height: 54px;
+    flex-basis: 270px;
     background-size: 100% auto;
   }
 }
 
 @media (max-width: 700px) {
   .nav-inner {
-    padding: 7px 14px 8px;
-    gap: 12px;
+    padding: 4px 12px 5px;
+    gap: 8px;
   }
 
   .nav-inner > .logo {
-    width: 184px;
-    height: 37px;
-    flex-basis: 184px;
+    width: 190px;
+    height: 38px;
+    flex-basis: 190px;
     background-size: 100% auto;
     background-position: left center;
   }
@@ -56,13 +57,13 @@
 
 @media (max-width: 420px) {
   .nav-inner {
-    padding: 6px 12px 7px;
-    gap: 10px;
+    padding: 3px 9px 4px;
+    gap: 6px;
   }
 
   .nav-inner > .logo {
-    width: 174px;
+    width: 176px;
     height: 35px;
-    flex-basis: 174px;
+    flex-basis: 176px;
   }
 }
