@@ -72,7 +72,7 @@
   font-size: clamp(48px, 6.4vw, 78px);
   letter-spacing: -4.5px;
   line-height: 0.98;
-  background: linear-gradient(135deg, #13172c 8%, #3933a1 57%, #6b64ff 100%);
+  background: linear-gradient(135deg, #111522 10%, #302b8f 55%, #635bff 100%);
 }
 
 .home-page .hero > p {
