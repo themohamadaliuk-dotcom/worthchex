@@ -1,1 +1,10 @@
 .nav-inner{gap:20px}.nav-links{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap}.nav-links>a{position:relative;color:#626a7e;text-decoration:none;font-size:13px;font-weight:650;transition:color .2s ease}.nav-links>a:hover{color:#5148e5}.nav-all-calculators{font-weight:800!important;color:#5148e5!important}.nav-all-calculators:after{content:'→';display:inline-block;margin-left:5px;transition:transform .2s ease}.nav-all-calculators:hover:after{transform:translateX(3px)}
+
+/* Final clean logo sizing: compact and balanced without the slogan. */
+.navbar .nav-inner > .logo{width:230px!important;height:40px!important;flex:0 0 230px!important;display:block;position:relative;overflow:hidden;background-image:url('assets/worthchex-logo.webp?v=20260826-size2')!important;background-position:left top!important;background-size:100% auto!important;background-repeat:no-repeat!important;background-color:#fff!important;font-size:0!important;line-height:0!important;color:transparent!important}
+.navbar .nav-inner > .logo::before,.navbar .nav-inner > .logo::after{content:none!important;display:none!important}
+.navbar .nav-inner > .logo .logo-icon{display:none!important}
+
+@media(max-width:900px){.navbar .nav-inner{padding:7px 18px}.navbar .nav-inner > .logo{width:210px!important;height:37px!important;flex-basis:210px!important}}
+@media(max-width:700px){.navbar .nav-inner{padding:3px 12px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;min-height:0}.nav-links{width:auto;flex:1;justify-content:flex-end;gap:4px 7px;line-height:1.05}.nav-links>a{font-size:9.5px;white-space:nowrap}.navbar .nav-inner > .logo{width:180px!important;height:32px!important;flex-basis:180px!important;background-position:left top!important}}
+@media(max-width:420px){.navbar .nav-inner{padding:2px 9px 3px;gap:6px}.nav-links{gap:3px 6px}.nav-links>a{font-size:8.5px}.navbar .nav-inner > .logo{width:166px!important;height:30px!important;flex-basis:166px!important}}
