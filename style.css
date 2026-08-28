@@ -1,13 +1,11 @@
 @import url('./style-core.css');
 
 /* WORTHCHEX — FINAL CLEAN HEADER LOGO
-   The original logo artwork is used, but the header container is
-   deliberately cropped before the built-in slogan. No generated
-   slogan text or pseudo-element is used anywhere in the header. */
+   Use the same header logo dimensions as the homepage on every page. */
 .navbar .nav-inner > .logo {
-  width: 250px !important;
-  height: 44px !important;
-  flex: 0 0 250px !important;
+  width: 190px !important;
+  height: 34px !important;
+  flex: 0 0 190px !important;
   display: block !important;
   position: relative !important;
   overflow: hidden !important;
@@ -34,24 +32,24 @@
 
 @media (max-width: 900px) {
   .navbar .nav-inner > .logo {
-    width: 230px !important;
-    height: 41px !important;
-    flex-basis: 230px !important;
+    width: 170px !important;
+    height: 31px !important;
+    flex-basis: 170px !important;
   }
 }
 
 @media (max-width: 700px) {
   .navbar .nav-inner > .logo {
-    width: 190px !important;
-    height: 34px !important;
-    flex-basis: 190px !important;
+    width: 150px !important;
+    height: 27px !important;
+    flex-basis: 150px !important;
   }
 }
 
 @media (max-width: 420px) {
   .navbar .nav-inner > .logo {
-    width: 176px !important;
-    height: 31px !important;
-    flex-basis: 176px !important;
+    width: 142px !important;
+    height: 26px !important;
+    flex-basis: 142px !important;
   }
 }
