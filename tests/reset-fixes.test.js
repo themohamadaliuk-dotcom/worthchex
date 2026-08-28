@@ -5,16 +5,28 @@ const vm = require("node:vm");
 const source = fs.readFileSync("reset-fixes.js", "utf8");
 
 function makeControl(type, value, checked = false, tagName = "INPUT") {
-  return {
+  const control = {
     type,
     tagName,
     value,
     checked,
-    selectedIndex: tagName === "SELECT" ? 0 : undefined,
     isConnected: true,
     dispatchCount: 0,
     dispatchEvent() { this.dispatchCount += 1; }
   };
+
+  if (tagName === "SELECT") {
+    let index = 0;
+    Object.defineProperty(control, "selectedIndex", {
+      get() { return index; },
+      set(next) {
+        index = next;
+        if (next === -1) control.value = "";
+      }
+    });
+  }
+
+  return control;
 }
 
 const input = makeControl("number", "40000");
