@@ -89,29 +89,25 @@
     const contributionFrequency=Math.max(1,Math.round(num(options.contributionFrequency)||12));
     const compoundingFrequency=Math.max(1,Math.round(num(options.compoundingFrequency)||12));
 
-    const months=Math.max(12, Math.round(years*12));
-    const contributionInterval=Math.max(1, Math.round(12/contributionFrequency));
-    const compoundingInterval=Math.max(1, Math.round(12/compoundingFrequency));
-    const periodicRate=annualRate===0?0:annualRate/100/compoundingFrequency;
+    // Convert the selected nominal annual rate into an equivalent monthly
+    // effective rate. This keeps contribution timing accurate even when the
+    // contribution and compounding frequencies differ, while preserving the
+    // selected annual compounding convention.
+    const monthlyRate=annualRate===0
+      ? 0
+      : Math.pow(1 + annualRate/100/compoundingFrequency, compoundingFrequency/12) - 1;
 
+    const months=Math.max(12, Math.round(years*12));
     let balance=starting;
     let totalContributions=0;
     const yearly=[];
 
     for(let month=1;month<=months;month+=1){
-      // Apply interest only at the selected compounding boundary.
-      // This makes annual/quarterly/monthly compounding mathematically distinct.
-      if(month%compoundingInterval===0 && periodicRate>0){
-        balance*=1+periodicRate;
-      }
-
-      // Contributions are added at the end of the selected contribution period,
-      // after any interest for that month has been applied.
-      if(month%contributionInterval===0){
+      balance*=1+monthlyRate;
+      if(month%(12/contributionFrequency)===0){
         balance+=contribution;
         totalContributions+=contribution;
       }
-
       if(month%12===0 || month===months){
         yearly.push({year:month/12,balance});
       }
@@ -119,9 +115,9 @@
 
     const totalPrincipal=starting+totalContributions;
     const interest=Math.max(0,balance-totalPrincipal);
-    const effectiveAnnualGrowth=compoundingFrequency>0 ? Math.pow(1+periodicRate,compoundingFrequency)-1 : 0;
+    const effectiveAnnualGrowth=Math.pow(1+monthlyRate,12)-1;
 
-    return {finalValue:balance,totalContributions,totalPrincipal,interest,yearly,periodicRate,effectiveAnnualGrowth,contributionFrequency,compoundingFrequency};
+    return {finalValue:balance,totalContributions,totalPrincipal,interest,yearly,monthlyRate,effectiveAnnualGrowth,contributionFrequency,compoundingFrequency};
   }
 
   function loanPayment(principal,annualRate,months,balloon=0){
