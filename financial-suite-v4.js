@@ -82,14 +82,46 @@
   function vatFromGross(gross,rate){const amount=Math.max(0,gross),r=Math.max(0,rate)/100,net=r===0?amount:amount/(1+r);return{gross:amount,net,vat:amount-net};}
 
   function compoundGrowth(options={}) {
-    const starting=Math.max(0,num(options.starting)), contribution=Math.max(0,num(options.contribution)), annualRate=Math.max(0,num(options.annualRate));
-    const years=clamp(num(options.years),1,100), contributionFrequency=Math.max(1,num(options.contributionFrequency)||12), compoundingFrequency=Math.max(1,num(options.compoundingFrequency)||12);
-    const monthlyRate=annualRate===0?0:Math.pow(1+annualRate/100/compoundingFrequency,compoundingFrequency/12)-1;
-    const months=Math.round(years*12), contributionEvery=Math.max(1,Math.round(12/contributionFrequency));
-    let balance=starting,totalContributions=0;const yearly=[];
-    for(let month=1;month<=months;month+=1){balance*=1+monthlyRate;if(month%contributionEvery===0){balance+=contribution;totalContributions+=contribution;}if(month%12===0||month===months)yearly.push({year:month/12,balance});}
-    const totalPrincipal=starting+totalContributions,interest=Math.max(0,balance-totalPrincipal);
-    return{finalValue:balance,totalContributions,totalPrincipal,interest,yearly,monthlyRate,effectiveAnnualGrowth:Math.pow(1+monthlyRate,12)-1};
+    const starting=Math.max(0,num(options.starting));
+    const contribution=Math.max(0,num(options.contribution));
+    const annualRate=Math.max(0,num(options.annualRate));
+    const years=clamp(num(options.years),1,100);
+    const contributionFrequency=Math.max(1,Math.round(num(options.contributionFrequency)||12));
+    const compoundingFrequency=Math.max(1,Math.round(num(options.compoundingFrequency)||12));
+
+    const months=Math.max(12, Math.round(years*12));
+    const contributionInterval=Math.max(1, Math.round(12/contributionFrequency));
+    const compoundingInterval=Math.max(1, Math.round(12/compoundingFrequency));
+    const periodicRate=annualRate===0?0:annualRate/100/compoundingFrequency;
+
+    let balance=starting;
+    let totalContributions=0;
+    const yearly=[];
+
+    for(let month=1;month<=months;month+=1){
+      // Apply interest only at the selected compounding boundary.
+      // This makes annual/quarterly/monthly compounding mathematically distinct.
+      if(month%compoundingInterval===0 && periodicRate>0){
+        balance*=1+periodicRate;
+      }
+
+      // Contributions are added at the end of the selected contribution period,
+      // after any interest for that month has been applied.
+      if(month%contributionInterval===0){
+        balance+=contribution;
+        totalContributions+=contribution;
+      }
+
+      if(month%12===0 || month===months){
+        yearly.push({year:month/12,balance});
+      }
+    }
+
+    const totalPrincipal=starting+totalContributions;
+    const interest=Math.max(0,balance-totalPrincipal);
+    const effectiveAnnualGrowth=compoundingFrequency>0 ? Math.pow(1+periodicRate,compoundingFrequency)-1 : 0;
+
+    return {finalValue:balance,totalContributions,totalPrincipal,interest,yearly,periodicRate,effectiveAnnualGrowth,contributionFrequency,compoundingFrequency};
   }
 
   function loanPayment(principal,annualRate,months,balloon=0){
