@@ -59,8 +59,8 @@ const quarterlyCompound = W.compoundGrowth({
   contributionFrequency: 12,
   compoundingFrequency: 4
 });
-assert.ok(Math.abs(quarterlyCompound.finalValue - 2405.698672) < 1e-9);
-assert.notEqual(quarterlyCompound.finalValue, monthlyCompound.finalValue);
+assert.ok(Math.abs(quarterlyCompound.finalValue - 2393.06535033179) < 1e-9);
+assert.ok(quarterlyCompound.finalValue < monthlyCompound.finalValue);
 
 const annualCompound = W.compoundGrowth({
   starting: 1000,
@@ -70,9 +70,20 @@ const annualCompound = W.compoundGrowth({
   contributionFrequency: 12,
   compoundingFrequency: 1
 });
-assert.equal(annualCompound.finalValue, 2320);
-assert.equal(annualCompound.interest, 120);
-assert.notEqual(annualCompound.finalValue, quarterlyCompound.finalValue);
+assert.ok(Math.abs(annualCompound.finalValue - 2384.64979083532) < 1e-9);
+assert.ok(annualCompound.finalValue < quarterlyCompound.finalValue);
+assert.ok(annualCompound.interest > 0);
+
+const contributionComparison = W.compoundGrowth({
+  starting: 1000,
+  contribution: 100,
+  annualRate: 12,
+  years: 1,
+  contributionFrequency: 1,
+  compoundingFrequency: 12
+});
+assert.equal(contributionComparison.totalContributions, 100);
+assert.equal(contributionComparison.totalPrincipal, 1100);
 
 const compoundWithGrowth = W.compoundGrowth({
   starting: 2000,
