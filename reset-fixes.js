@@ -12,37 +12,36 @@
 
       card.dataset.worthchexResetBound = "true";
 
-      resetButton.addEventListener("click", function () {
-        // Final reset state: every user-editable field is blank.
+      // Capture-phase handler makes this the single authoritative reset.
+      // It runs before older inline reset handlers and prevents those handlers
+      // from restoring example values after we have cleared the form.
+      resetButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
         controls.forEach(control => {
           if (!control.isConnected) return;
 
-          if (control.type === "checkbox" || control.type === "radio") {
+          if (control.tagName === "SELECT") {
+            control.selectedIndex = -1;
+          } else if (control.type === "checkbox" || control.type === "radio") {
             control.checked = false;
           } else {
             control.value = "";
           }
         });
 
-        // Clear every generated result on the calculator page.
         card.querySelectorAll(".result").forEach(result => {
           result.innerHTML = "";
           result.classList.add("hidden");
         });
 
-        // Re-run conditional UI logic after clearing values.
-        [
-          "savingsMode", "debtMode", "purchaseType", "salaryFrequency", "taxRegion", "niCategory",
-          "studentPlan", "thRegion", "thNI", "thPensionMethod", "thStudent", "ciContributionFreq",
-          "ciCompounding", "sdFirst", "sdAdditional", "sdReplacing", "sdResident", "mortgageType",
-          "mortgageFirstTime", "mortgageAdditional", "mortgageReplacing", "vatMode", "vatRate", "carTerm"
-        ].forEach(id => {
-          const control = document.getElementById(id);
-          if (control && card.contains(control)) {
+        controls.forEach(control => {
+          if (control.isConnected && control.tagName === "SELECT") {
             control.dispatchEvent(new Event("change", { bubbles: true }));
           }
         });
-      });
+      }, true);
     });
   }
 
