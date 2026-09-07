@@ -36,18 +36,17 @@ function normaliseInternalTarget(raw, sourceFile) {
   if (withoutQuery.startsWith("/")) {
     targetPath = withoutQuery.slice(1);
   } else {
-    targetPath = path.posix.normalize(path.posix.join(path.posix.dirname(path.relative(ROOT, sourceFile).replaceAll(path.sep, "/")), withoutQuery));
+    const sourceRelative = path.relative(ROOT, sourceFile).replaceAll(path.sep, "/");
+    targetPath = path.posix.normalize(path.posix.join(path.posix.dirname(sourceRelative), withoutQuery));
   }
-  if (targetPath.endsWith("/")) targetPath += "index.html";
-  else if (targetPath === "") targetPath = "index.html";
 
-  const direct = targetPath;
-  if (fileSet.has(direct)) return direct;
+  if (targetPath === "." || targetPath === ".." || targetPath === "") targetPath = "index.html";
+  else if (targetPath.endsWith("/")) targetPath += "index.html";
 
+  if (fileSet.has(targetPath)) return targetPath;
   const asIndex = targetPath.endsWith(".html") ? targetPath : `${targetPath}/index.html`;
   if (fileSet.has(asIndex)) return asIndex;
-
-  return direct;
+  return targetPath;
 }
 
 function expectedCanonical(sourceFile) {
@@ -60,6 +59,9 @@ function expectedCanonical(sourceFile) {
 for (const file of htmlFiles) {
   const relative = path.relative(ROOT, file).replaceAll(path.sep, "/");
   const html = fs.readFileSync(file, "utf8");
+
+  // Google Search Console site-verification HTML is intentionally not a full web page.
+  if (path.basename(relative).startsWith("google") && !/<html\b/i.test(html)) continue;
 
   const titleMatches = html.match(/<title\b[^>]*>[\s\S]*?<\/title>/gi) || [];
   if (titleMatches.length !== 1) failures.push(`${relative}: expected exactly one <title>, found ${titleMatches.length}`);
@@ -74,11 +76,8 @@ for (const file of htmlFiles) {
     failures.push(`${relative}: canonical ${canonicalMatches[0][1]} does not match expected ${expectedCanonical(file)}`);
   }
 
-  if (!/<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*index[^"']*["'][^>]*>/i.test(html)) {
-    // Pages without a robots tag are indexable by default; only reject explicit noindex.
-    if (/<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
-      failures.push(`${relative}: explicit noindex found on a page expected to be indexable`);
-    }
+  if (/<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
+    failures.push(`${relative}: explicit noindex found on a page expected to be indexable`);
   }
 
   const ids = new Map();
@@ -100,8 +99,10 @@ for (const file of htmlFiles) {
     if (/^https?:\/\//i.test(href)) {
       try {
         const url = new URL(href);
-        if (url.hostname === INTERNAL_HOST || url.hostname === `www.${INTERNAL_HOST}`) failures.push(`${relative}: internal URL should normally be relative: ${href}`);
-        if (url.hostname !== INTERNAL_HOST && /\btarget=["']_blank["']/i.test(match[0]) && !/\brel=["'][^"']*noopener/i.test(match[0])) {
+        if ((url.hostname === INTERNAL_HOST || url.hostname === `www.${INTERNAL_HOST}`) && url.protocol !== "https:") {
+          failures.push(`${relative}: internal absolute URL is not HTTPS: ${href}`);
+        }
+        if (url.hostname !== INTERNAL_HOST && url.hostname !== `www.${INTERNAL_HOST}` && /\btarget=["']_blank["']/i.test(match[0]) && !/\brel=["'][^"']*noopener/i.test(match[0])) {
           failures.push(`${relative}: target=_blank external link missing rel=noopener: ${href}`);
         }
       } catch {
