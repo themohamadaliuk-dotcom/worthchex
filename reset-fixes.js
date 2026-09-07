@@ -3,6 +3,8 @@
   "use strict";
 
   function initialiseSalaryPeriodSwitch() {
+    if (!document.getElementById) return;
+
     const input = document.getElementById("salaryInput");
     const period = document.getElementById("salaryPeriod");
     if (!input || !period || input.dataset.worthchexSalaryPeriodBound === "true") return;
