@@ -2,7 +2,35 @@
 (function () {
   "use strict";
 
+  function initialiseSalaryPeriodSwitch() {
+    const input = document.getElementById("salaryInput");
+    const period = document.getElementById("salaryPeriod");
+    if (!input || !period || input.dataset.worthchexSalaryPeriodBound === "true") return;
+
+    input.dataset.worthchexSalaryPeriodBound = "true";
+    period.dataset.worthchexPreviousPeriod = period.value || "annual";
+
+    period.addEventListener("change", function () {
+      const previous = period.dataset.worthchexPreviousPeriod || "annual";
+      const next = period.value || "annual";
+      const value = Number(input.value);
+
+      if (input.value.trim() !== "" && Number.isFinite(value) && value >= 0 && previous !== next) {
+        const converted = previous === "annual" && next === "monthly"
+          ? value / 12
+          : previous === "monthly" && next === "annual"
+            ? value * 12
+            : value;
+        input.value = converted === 0 ? "0" : String(Number(converted.toFixed(2)));
+      }
+
+      period.dataset.worthchexPreviousPeriod = next;
+    });
+  }
+
   function initialiseResets() {
+    initialiseSalaryPeriodSwitch();
+
     document.querySelectorAll(".calculator-card").forEach(card => {
       if (card.dataset.worthchexResetBound === "true") return;
 
