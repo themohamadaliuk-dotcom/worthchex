@@ -27,6 +27,8 @@ jobs:
           node --check reset-fixes.js
           node --check script.js
           node --check advanced-calculators.js
+      - name: Run whole-site HTML, link and asset audit
+        run: node tests/site-audit.test.js
       - name: Run legacy calculator regression tests
         run: node tests/calculations.test.js
       - name: Run advanced calculator regression tests
