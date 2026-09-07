@@ -32,15 +32,14 @@ function normaliseInternalTarget(raw, sourceFile) {
   const withoutQuery = withoutHash.split("?")[0];
   if (!withoutQuery) return null;
 
-  let targetPath;
-  if (withoutQuery.startsWith("/")) {
-    targetPath = withoutQuery.slice(1);
-  } else {
-    const sourceRelative = path.relative(ROOT, sourceFile).replaceAll(path.sep, "/");
-    targetPath = path.posix.normalize(path.posix.join(path.posix.dirname(sourceRelative), withoutQuery));
-  }
+  const sourceRelative = path.relative(ROOT, sourceFile).replaceAll(path.sep, "/");
+  const sourceDirectory = path.posix.dirname(sourceRelative);
+  const resolved = withoutQuery.startsWith("/")
+    ? path.posix.resolve("/", `/${withoutQuery}`)
+    : path.posix.resolve("/", sourceDirectory, withoutQuery);
+  let targetPath = resolved.replace(/^\/+/, "");
 
-  if (targetPath === "." || targetPath === ".." || targetPath === "") targetPath = "index.html";
+  if (targetPath === "") targetPath = "index.html";
   else if (targetPath.endsWith("/")) targetPath += "index.html";
 
   if (fileSet.has(targetPath)) return targetPath;
@@ -112,9 +111,7 @@ for (const file of htmlFiles) {
     }
     if (/^\/\//.test(href)) continue;
     const target = normaliseInternalTarget(href, file);
-    if (target && !fileSet.has(target) && !fileSet.has(target.endsWith("/index.html") ? target : `${target}/index.html`)) {
-      failures.push(`${relative}: broken internal link ${href} -> ${target}`);
-    }
+    if (target && !fileSet.has(target)) failures.push(`${relative}: broken internal link ${href} -> ${target}`);
   }
 
   for (const match of html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/gi)) {
