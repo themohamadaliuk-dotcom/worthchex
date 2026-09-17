@@ -1,0 +1,22 @@
+/* WorthChex editorial content layer: readable explanations, examples and FAQs. */
+.editorial-section { padding: 78px 20px; background: #fff; border-top: 1px solid #e8eaf0; }
+.editorial-section.alt { background: #f7f8fc; }
+.editorial-inner { max-width: 900px; margin: 0 auto; }
+.editorial-inner h2 { margin: 10px 0 14px; font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -1.2px; }
+.editorial-inner h3 { margin: 28px 0 8px; font-size: 20px; line-height: 1.25; }
+.editorial-inner p { color: #667084; font-size: 16px; line-height: 1.78; }
+.editorial-inner ul { color: #667084; line-height: 1.75; padding-left: 20px; }
+.content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 28px 0 38px; }
+.content-card { padding: 22px; background: #f8f9fc; border: 1px solid #e7e9f0; border-radius: 16px; }
+.content-card h2, .content-card h3 { margin-top: 0; color: #151827; }
+.content-card p { margin-bottom: 0; font-size: 14px; }
+.example-box { margin: 26px 0; padding: 22px; background: #f0efff; border: 1px solid #dedcff; border-radius: 16px; }
+.example-box strong { color: #2e296d; }
+.content-callout { margin: 30px 0 0; padding: 22px; border-left: 4px solid #635bff; background: #f7f8fc; border-radius: 12px; }
+.content-callout p { margin-bottom: 0; }
+.faq-list { margin-top: 24px; border-top: 1px solid #e4e6ed; }
+.faq-list details { padding: 18px 0; border-bottom: 1px solid #e4e6ed; }
+.faq-list summary { cursor: pointer; font-weight: 750; color: #1a1e2c; }
+.faq-list details p { margin: 12px 0 0; font-size: 15px; }
+.source-note { font-size: 13px !important; color: #7b8394 !important; }
+@media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } .editorial-section { padding: 60px 20px; } }
