@@ -158,6 +158,109 @@
     return { gross: salary, tax, ni, pension, sacrifice, student, postgraduate, net, monthly: net / 12, weekly: net / 52 };
   }
 
+
+  function affordabilityPlan(inputs = {}) {
+    const income = Math.max(0, Number(inputs.income || 0));
+    const purchase = Math.max(0, Number(inputs.purchase || 0));
+    if (income <= 0 || purchase <= 0) return null;
+
+    const categories = {
+      housing: Math.max(0, Number(inputs.housing || 0)),
+      bills: Math.max(0, Number(inputs.bills || 0)),
+      food: Math.max(0, Number(inputs.food || 0)),
+      transport: Math.max(0, Number(inputs.transport || 0)),
+      childcare: Math.max(0, Number(inputs.childcare || 0)),
+      debt: Math.max(0, Number(inputs.debt || 0)),
+      subscriptions: Math.max(0, Number(inputs.subscriptions || 0)),
+      irregular: Math.max(0, Number(inputs.irregular || 0))
+    };
+
+    const existingSpending = Object.values(categories).reduce((sum, value) => sum + value, 0);
+    const disposableBeforePayment = income - existingSpending;
+    const mode = inputs.purchaseType === "finance" ? "finance" : "cash";
+
+    let deposit = 0;
+    let financedAmount = 0;
+    let payment = 0;
+    let financeInterest = 0;
+    let totalFinance = 0;
+    let financePeriods = 0;
+
+    if (mode === "finance") {
+      deposit = Math.min(purchase, Math.max(0, Number(inputs.deposit || 0)));
+      financedAmount = Math.max(0, purchase - deposit);
+      const termYears = Math.max(0, Number(inputs.financeTerm || 0));
+      if (financedAmount > 0 && termYears <= 0) return { valid: false, error: "Enter a finance term." };
+      if (financedAmount > 0) {
+        const plan = amortise(
+          financedAmount,
+          Math.max(0, Number(inputs.financeRate || 0)),
+          Math.max(1, termYears * 12),
+          Math.max(0, Number(inputs.financeExtra || 0))
+        );
+        if (!plan) return { valid: false, error: "This finance plan does not amortise under the assumptions entered." };
+        payment = plan.payment;
+        financeInterest = plan.interest;
+        totalFinance = plan.total;
+        financePeriods = plan.periods;
+      }
+    }
+
+    const upfrontCash = mode === "finance" ? deposit : purchase;
+    const savings = Math.max(0, Number(inputs.savings || 0));
+    const emergencyTarget = Math.max(0, Number(inputs.emergency || 0));
+    const hasSavings = inputs.hasSavings !== false;
+    const hasEmergency = inputs.hasEmergency !== false;
+    const savingsAfterPurchase = hasSavings ? savings - upfrontCash : null;
+    const emergencyShortfall = hasSavings && hasEmergency
+      ? Math.max(0, emergencyTarget - Math.max(0, savingsAfterPurchase))
+      : null;
+    const monthlyAfterPayment = disposableBeforePayment - payment;
+
+    const pctOfIncome = value => income > 0 ? (value / income) * 100 : null;
+    const pctOfDisposable = disposableBeforePayment > 0 ? (value / disposableBeforePayment) * 100 : null;
+
+    return {
+      valid: true,
+      mode,
+      income,
+      purchase,
+      categories,
+      existingSpending,
+      disposableBeforePayment,
+      deposit,
+      financedAmount,
+      payment,
+      financeRate: Math.max(0, Number(inputs.financeRate || 0)),
+      financeTerm: Math.max(0, Number(inputs.financeTerm || 0)),
+      financeExtra: Math.max(0, Number(inputs.financeExtra || 0)),
+      financeInterest,
+      totalFinance,
+      financePeriods,
+      upfrontCash,
+      savings,
+      emergencyTarget,
+      hasSavings,
+      hasEmergency,
+      savingsAfterPurchase,
+      emergencyShortfall,
+      monthlyAfterPayment,
+      ratios: {
+        housing: pctOfIncome(categories.housing),
+        debt: pctOfIncome(categories.debt),
+        existingSpending: pctOfIncome(existingSpending),
+        payment: pctOfIncome(payment),
+        paymentOfDisposable: pctOfDisposable(payment),
+        totalCommitments: pctOfIncome(existingSpending + payment),
+        remainingIncome: pctOfIncome(monthlyAfterPayment),
+        upfrontCashOfSavings: hasSavings && savings > 0 ? (upfrontCash / savings) * 100 : null,
+        reserveCoverage: hasSavings && hasEmergency && emergencyTarget > 0
+          ? (Math.max(0, savingsAfterPurchase) / emergencyTarget) * 100
+          : null
+      }
+    };
+  }
+
   function render() {
     const $ = id => document.getElementById(id);
     const n = id => Math.max(0, Number($(id)?.value || 0));
@@ -167,37 +270,142 @@
     const stat = (a,b) => `<div class="stat"><span>${a}</span><strong>${b}</strong></div>`;
 
     if ($("calculateButton")) {
+      const toggleFinanceFields = () => {
+        const finance = $("purchaseType")?.value === "finance";
+        document.querySelectorAll("[data-affordability-finance]").forEach(el => {
+          el.hidden = !finance;
+        });
+      };
+
+      toggleFinanceFields();
+      $("purchaseType")?.addEventListener("change", toggleFinanceFields);
+
       $("calculateButton").addEventListener("click", () => {
-        const income=n("income"), purchase=n("purchase"), savings=n("savings"), emergency=n("emergency");
-        if (income<=0) return show("result", '<h2 class="bad">Enter your monthly take-home income</h2><p>We need your monthly take-home pay before assessing the purchase.</p>');
-        if (purchase<=0) return show("result", '<h2 class="warning">Enter the purchase price</h2><p>Tell us what the item costs.</p>');
-        const expenses=["rent","bills","food","transport","subscriptions","debt"].reduce((s,id)=>s+(has(id)?n(id):0),0);
-        const disposable=income-expenses, mode=$("purchaseType")?.value||"cash";
-        let deposit=0,payment=0,financeInterest=0,totalFinance=0;
-        if(mode==="finance"){
-          deposit=Math.min(purchase,n("deposit"));
-          const plan=amortise(Math.max(0,purchase-deposit),n("financeRate"),Math.max(1,n("financeTerm")*12),n("financeExtra"));
-          if(!plan)return show("result",'<h2 class="bad">This finance plan does not amortise</h2><p>Increase the term, reduce the rate or reduce the financed amount.</p>');
-          payment=plan.payment; financeInterest=plan.interest; totalFinance=plan.total;
+        const fields = {
+          income: n("income"),
+          purchase: n("purchase"),
+          purchaseType: $("purchaseType")?.value || "cash",
+          housing: n("rent"),
+          bills: n("bills"),
+          food: n("food"),
+          transport: n("transport"),
+          childcare: n("childcare"),
+          debt: n("debt"),
+          subscriptions: n("subscriptions"),
+          irregular: n("irregular"),
+          savings: n("savings"),
+          emergency: n("emergency"),
+          hasSavings: has("savings"),
+          hasEmergency: has("emergency"),
+          deposit: n("deposit"),
+          financeRate: n("financeRate"),
+          financeTerm: n("financeTerm"),
+          financeExtra: n("financeExtra")
+        };
+
+        if (fields.income <= 0) {
+          return show("result", '<h2 class="bad">Enter your monthly take-home income</h2><p>Use the amount you actually have available for the household budget.</p>');
         }
-        const cashRemaining=savings-(mode==="cash"?purchase:deposit);
-        const emergencyGap=has("savings")&&has("emergency")?Math.max(0,emergency-cashRemaining):null;
-        const monthlyAfter=disposable-payment;
-        const share=disposable>0?payment/disposable*100:100;
-        let score=70,tone="warning",title="Review the assumptions carefully";
-        if(disposable<=0){score=5;tone="bad";title="Your budget has no spare monthly income";}
-        else if(mode==="finance"&&monthlyAfter<=0){score=20;tone="bad";title="The finance payment does not fit";}
-        else if(mode==="finance"&&share>30){score=35;tone="bad";title="The finance would leave little breathing room";}
-        else if(mode==="finance"&&share>20){score=60;tone="warning";title="I'd think carefully about this finance";}
-        else if(mode==="finance"){score=share<=10?95:80;tone="good";title="The finance looks manageable";}
-        else if(!has("savings")){score=65;tone="warning";title="It may be affordable, but savings safety is unknown";}
-        else if(cashRemaining<0){score=20;tone="bad";title="Your savings do not cover the cash purchase";}
-        else if(emergencyGap>0){score=55;tone="warning";title="The purchase would reduce your emergency buffer";}
-        else if(purchase>0&&savings>0&&purchase/savings>0.5){score=70;tone="warning";title="The cash purchase uses a large share of your savings";}
-        else{score=90;tone="good";title="The cash purchase looks manageable";}
-        show("result",`<div class="score-circle"><span>${score}</span><small>score</small></div><h2 class="${tone}">${title}</h2>${stat("Monthly disposable income",money(disposable))}${mode==="finance"?stat("Deposit",money(deposit))+stat("Estimated monthly payment",money(payment))+stat("Finance interest",money(financeInterest))+stat("Total finance repayment",money(totalFinance))+stat("Payment share",`${share.toFixed(0)}%`):stat("Cash purchase",money(purchase))+(has("savings")?stat("Savings after purchase",money(cashRemaining)):"")}${emergencyGap!==null?stat("Emergency-fund shortfall",emergencyGap?`<span class="bad">${money(emergencyGap)}</span>`:'<span class="good">None</span>'):""}<div class="result-message ${tone}"><p>${mode==="finance"?`After the estimated finance payment, around <strong>${money(Math.max(0,monthlyAfter))}</strong> remains each month.`:has("savings")?`The cash purchase would leave <strong>${money(Math.max(0,cashRemaining))}</strong> of the savings you entered.`:"Add current savings and an emergency-fund target for a stronger cash-purchase check."}</p></div><p class="disclaimer">Planning estimate only. It is not a lender decision or personalised financial advice.</p>`);
+        if (fields.purchase <= 0) {
+          return show("result", '<h2 class="warning">Enter the purchase price</h2><p>Tell us what the purchase costs before we calculate the monthly and savings impact.</p>');
+        }
+        if (fields.purchaseType === "finance" && fields.deposit > fields.purchase) {
+          fields.deposit = fields.purchase;
+        }
+        if (fields.purchaseType === "finance" && fields.financeTerm <= 0) {
+          return show("result", '<h2 class="warning">Enter the finance term</h2><p>Choose how many years the finance will run for.</p>');
+        }
+
+        const plan = affordabilityPlan(fields);
+        if (!plan || plan.valid === false) {
+          return show("result", `<h2 class="bad">We need one more detail</h2><p>${plan?.error || "Check the figures entered and try again."}</p>`);
+        }
+
+        const pct = value => value == null ? "—" : `${value.toFixed(1)}%`;
+        const categoryRows = [
+          ["Housing", plan.categories.housing, plan.ratios.housing],
+          ["Bills & household", plan.categories.bills, plan.income > 0 ? plan.categories.bills / plan.income * 100 : 0],
+          ["Food & groceries", plan.categories.food, plan.income > 0 ? plan.categories.food / plan.income * 100 : 0],
+          ["Transport", plan.categories.transport, plan.income > 0 ? plan.categories.transport / plan.income * 100 : 0],
+          ["Childcare / dependants", plan.categories.childcare, plan.income > 0 ? plan.categories.childcare / plan.income * 100 : 0],
+          ["Existing debt", plan.categories.debt, plan.ratios.debt],
+          ["Subscriptions & discretionary", plan.categories.subscriptions, plan.income > 0 ? plan.categories.subscriptions / plan.income * 100 : 0],
+          ["Annual / irregular allowance", plan.categories.irregular, plan.income > 0 ? plan.categories.irregular / plan.income * 100 : 0]
+        ].filter(([, value]) => value > 0);
+
+        const categoryHtml = categoryRows.length
+          ? `<div class="affordability-breakdown"><div class="affordability-breakdown-title">Existing monthly spending</div>${categoryRows.map(([label, value, ratio]) => `<div class="affordability-breakdown-row"><span>${label}</span><strong>${money(value)}</strong><small>${pct(ratio)} of take-home income</small></div>`).join("")}</div>`
+          : "";
+
+        const remainingClass = plan.monthlyAfterPayment >= 0 ? "good" : "bad";
+        const reserveClass = plan.emergencyShortfall === null ? "" : (plan.emergencyShortfall > 0 ? "bad" : "good");
+
+        const summary = `
+          <div class="affordability-result-hero">
+            <span class="mini-label">${plan.mode === "finance" ? "Money left after current spending + payment" : "Monthly disposable income before this cash purchase"}</span>
+            <strong class="big-number">${money(plan.mode === "finance" ? plan.monthlyAfterPayment : plan.disposableBeforePayment)}</strong>
+            <span class="affordability-result-sub ${remainingClass}">${pct(plan.mode === "finance" ? plan.ratios.remainingIncome : plan.ratios.existingSpending)} of take-home income represented by this figure</span>
+          </div>
+          <div class="affordability-summary-grid">
+            <div class="affordability-metric"><span>Existing spending</span><strong>${money(plan.existingSpending)}</strong><small>${pct(plan.ratios.existingSpending)} of income</small></div>
+            <div class="affordability-metric"><span>New monthly payment</span><strong>${money(plan.payment)}</strong><small>${pct(plan.ratios.payment)} of income</small></div>
+            <div class="affordability-metric"><span>Total commitments</span><strong>${money(plan.existingSpending + plan.payment)}</strong><small>${pct(plan.ratios.totalCommitments)} of income</small></div>
+            <div class="affordability-metric"><span>Income remaining</span><strong class="${remainingClass}">${money(plan.monthlyAfterPayment)}</strong><small>${pct(plan.ratios.remainingIncome)} of income</small></div>
+          </div>
+        `;
+
+        const financeHtml = plan.mode === "finance"
+          ? `<div class="what-if-box affordability-detail-box">
+              <strong>Finance breakdown</strong>
+              ${stat("Purchase price", money(plan.purchase))}
+              ${stat("Deposit", money(plan.deposit))}
+              ${stat("Deposit as % of purchase", pct(plan.deposit / plan.purchase * 100))}
+              ${stat("Amount financed", money(plan.financedAmount))}
+              ${stat("Financed as % of purchase", pct(plan.financedAmount / plan.purchase * 100))}
+              ${stat("APR", pct(plan.financeRate))}
+              ${stat("Term", `${plan.financeTerm.toFixed(1)} years`)}
+              ${stat("Extra monthly payment", money(plan.financeExtra))}
+              ${stat("Estimated monthly payment", money(plan.payment))}
+              ${stat("Payment as % of take-home pay", pct(plan.ratios.payment))}
+              ${plan.ratios.paymentOfDisposable == null ? "" : stat("Payment as % of pre-payment disposable income", pct(plan.ratios.paymentOfDisposable))}
+              ${stat("Finance interest", money(plan.financeInterest))}
+              ${stat("Total finance repayment", money(plan.totalFinance))}
+              ${stat("Estimated payoff", `${plan.financePeriods} months`)}
+            </div>`
+          : "";
+
+        const cashHtml = plan.mode === "cash"
+          ? `<div class="what-if-box affordability-detail-box">
+              <strong>Cash purchase & savings</strong>
+              ${stat("Purchase price", money(plan.purchase))}
+              ${plan.hasSavings ? stat("Savings before purchase", money(plan.savings)) : ""}
+              ${plan.hasSavings ? stat("Cash purchase as % of savings", pct(plan.ratios.upfrontCashOfSavings)) : ""}
+              ${plan.hasSavings ? stat("Savings after purchase", money(plan.savingsAfterPurchase)) : ""}
+              ${plan.hasEmergency ? stat("Emergency-fund target", money(plan.emergencyTarget)) : ""}
+              ${plan.ratios.reserveCoverage == null ? "" : stat("Emergency target covered", pct(plan.ratios.reserveCoverage))}
+              ${plan.emergencyShortfall === null ? "" : stat("Emergency-fund shortfall", plan.emergencyShortfall > 0 ? `<span class="bad">${money(plan.emergencyShortfall)}</span>` : `<span class="good">£0.00</span>`)}
+            </div>`
+          : "";
+
+        const contextNote = plan.ratios.totalCommitments > 100
+          ? '<div class="result-message bad"><p>Your entered monthly commitments are greater than your take-home income by <strong>' + money(Math.abs(plan.monthlyAfterPayment)) + '</strong> per month. This is a budget calculation, not a lender decision.</p></div>'
+          : plan.ratios.totalCommitments === 100
+            ? '<div class="result-message warning"><p>Your entered monthly commitments use <strong>100%</strong> of take-home income, leaving nothing before irregular or unexpected costs.</p></div>'
+            : '<div class="result-message"><p>Your entered figures leave <strong>' + money(plan.monthlyAfterPayment) + '</strong> after existing spending and the new payment. The percentage is shown against take-home income so the calculation is easy to audit.</p></div>';
+
+        show("result", `${summary}${contextNote}${financeHtml}${cashHtml}${categoryHtml}
+          <div class="affordability-reference-note">
+            <strong>Why there is no universal “safe” percentage</strong>
+            <p>Lenders assess affordability using income and expenditure and their own criteria. MoneyHelper says people typically spend around 28–35% of income on a mortgage, but explicitly says there is no one percentage that is right for everyone. WorthChex therefore shows the percentages from your own budget instead of turning one rule of thumb into a pass/fail score.</p>
+            <a href="https://www.moneyhelper.org.uk/en/blog/buy-or-rent-a-home/how-much-should-i-spend-on-a-mortgage" target="_blank" rel="noopener noreferrer">MoneyHelper: mortgage affordability and percentages →</a>
+          </div>
+          <p class="disclaimer">Planning estimate only. Your inputs determine the percentages shown. Lenders use their own affordability assessments, and real costs can include items you have not entered.</p>`);
       });
-      $("resetButton")?.addEventListener("click",()=>clear(["income","rent","bills","food","transport","subscriptions","debt","savings","emergency","purchase","deposit","financeRate","financeTerm","financeExtra"],"result"));
+
+      $("resetButton")?.addEventListener("click", () => clear(
+        ["income","rent","bills","food","transport","childcare","debt","subscriptions","irregular","savings","emergency","purchase","deposit","financeRate","financeTerm","financeExtra"],
+        "result"
+      ));
     }
 
     if ($("savingsCalculateButton")) {
@@ -260,5 +468,5 @@
     else render();
   }
 
-  return { clamp, money, annuityPayment, amortise, debtPlan, futureValue, monthlyFutureValue, requiredMonthlySaving, mortgagePlan, sdlt, personalAllowance, incomeTax, employeeNI, loanRepayment, takeHome };
+  return { clamp, money, annuityPayment, amortise, debtPlan, futureValue, monthlyFutureValue, requiredMonthlySaving, mortgagePlan, sdlt, personalAllowance, incomeTax, employeeNI, loanRepayment, takeHome, affordabilityPlan };
 });
