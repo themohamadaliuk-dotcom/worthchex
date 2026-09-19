@@ -1,5 +1,247 @@
-<!DOCTYPE html><html lang="en-GB"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Free UK affordability calculator for cash or finance purchases. Test income, spending, savings, emergency buffer, deposit, APR and term, then read how the result should be interpreted."><meta name="robots" content="index, follow"><link rel="canonical" href="https://worthchex.com/affordability-calculator/"><link rel="icon" href="../favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../calculator-v2.css"><link rel="stylesheet" href="../content-enhancements.css"><title>Affordability Calculator UK | Cash or Finance | WorthChex</title></head><body><nav class="navbar" aria-label="Main navigation"><div class="nav-inner"><a href="../" class="logo" aria-label="WorthChex home"><span class="logo-icon">£</span>WorthChex</a><div class="nav-links"><a href="../savings-calculator/">Savings</a><a href="../debt-payoff-calculator/">Debt</a><a href="../calculators/">More calculators</a><a href="../money-guides/">Money guides</a></div></div></nav><main class="calculator-page"><div class="breadcrumbs"><a href="../">WorthChex</a> / Affordability calculator</div><header class="page-header"><span class="step">AFFORDABILITY CALCULATOR V3</span><h1>Can I afford this without stretching my budget?</h1><p>Model a cash purchase or finance plan, see monthly breathing room, test your emergency buffer and compare different payment choices.</p></header><section class="calculator-card"><div class="privacy-notice"><div class="privacy-notice-inner"><div class="privacy-icon">🔒</div><div><strong>Private, browser-based calculation</strong><p>No bank connection or account is required. Only the figures you enter are used.</p></div></div></div><div class="form-section"><h3>Monthly income</h3><label for="income">Take-home income</label><div class="input-wrapper"><span>£</span><input id="income" type="number" min="0" step="1" placeholder="2,500"></div></div><div class="form-section"><h3>Regular monthly spending</h3><p class="section-help">Blank categories are excluded rather than silently treated as £0.</p><label for="rent">Rent / mortgage</label><div class="input-wrapper"><span>£</span><input id="rent" type="number" min="0" step="1"></div><label for="bills">Bills & utilities</label><div class="input-wrapper"><span>£</span><input id="bills" type="number" min="0" step="1"></div><label for="food">Food & groceries</label><div class="input-wrapper"><span>£</span><input id="food" type="number" min="0" step="1"></div><label for="transport">Transport</label><div class="input-wrapper"><span>£</span><input id="transport" type="number" min="0" step="1"></div><label for="subscriptions">Subscriptions</label><div class="input-wrapper"><span>£</span><input id="subscriptions" type="number" min="0" step="1"></div><label for="debt">Debt payments</label><div class="input-wrapper"><span>£</span><input id="debt" type="number" min="0" step="1"></div></div><div class="form-section"><h3>Savings safety check</h3><div class="control-row"><div><label for="savings">Current savings</label><div class="input-wrapper"><span>£</span><input id="savings" type="number" min="0" step="1"></div></div><div><label for="emergency">Emergency-fund target</label><div class="input-wrapper"><span>£</span><input id="emergency" type="number" min="0" step="1"></div></div></div></div><div class="form-section purchase-section"><h3>Purchase scenario</h3><label for="purchase">Purchase price</label><div class="input-wrapper"><span>£</span><input id="purchase" type="number" min="0" step="100" placeholder="20,000"></div><label for="purchaseType">How are you paying?</label><div class="input-wrapper"><select id="purchaseType"><option value="cash">Cash</option><option value="finance">Finance</option></select></div><div class="control-row"><div><label for="deposit">Deposit</label><div class="input-wrapper"><span>£</span><input id="deposit" type="number" min="0" step="100" value="0"></div></div><div><label for="financeRate">Finance APR</label><div class="input-wrapper"><input id="financeRate" type="number" min="0" step="0.01" value="8.9"><span>%</span></div></div></div><div class="control-row"><div><label for="financeTerm">Finance term</label><div class="input-wrapper"><input id="financeTerm" type="number" min="1" max="20" step="1" value="5"><span>years</span></div></div><div><label for="financeExtra">Extra monthly payment</label><div class="input-wrapper"><span>£</span><input id="financeExtra" type="number" min="0" step="10" value="0"></div></div></div></div><button id="calculateButton" class="calculate-button" type="button">Check my affordability <span>→</span></button><button id="resetButton" class="reset-button" type="button">Clear everything</button><div id="result" class="result hidden" aria-live="polite"></div></section><section class="information-section"><div class="information-inner narrow"><span class="step">METHODOLOGY</span><h2>Cash and finance are assessed differently.</h2><p>A cash purchase is checked against your entered savings and emergency target. A financed purchase is checked against recurring monthly disposable income and the modelled finance payment.</p><p>This is a planning indicator, not a lender affordability decision.</p></div></section></main>
-<section class="editorial-section"><div class="editorial-inner"><span class="step">HOW TO READ THE RESULT</span><h2>Affordability is more than a monthly payment.</h2><p>A purchase can fit a monthly budget and still leave too little cash in reserve. It can also leave a healthy savings balance while creating a recurring payment that makes the rest of the month uncomfortable. This calculator keeps those two questions separate.</p><div class="content-grid"><article class="content-card"><h3>Monthly breathing room</h3><p>This is the money left after the spending categories you enter. It is not a guarantee that you will actually have that amount available every month because irregular costs may not be included.</p></article><article class="content-card"><h3>Savings safety</h3><p>For a cash purchase, compare the post-purchase balance with the emergency-fund target you entered. A mathematically affordable purchase may still use savings you intended to keep available.</p></article><article class="content-card"><h3>Finance cost</h3><p>For finance, look at both the monthly payment and the total borrowing cost. A longer term may lower the monthly payment while keeping the debt around for longer.</p></article></div><div class="example-box"><strong>Example:</strong> a £20,000 purchase might be manageable with a large monthly surplus but uncomfortable as a cash purchase if it uses most of the savings buffer. The same purchase financed over a longer period may preserve cash while creating a new monthly commitment. Running both scenarios makes that trade-off visible.</div></div></section>
-<section class="editorial-section alt"><div class="editorial-inner"><span class="step">WHAT TO INCLUDE</span><h2>Use realistic inputs, not optimistic ones.</h2><p>For a useful result, include regular costs that are easy to forget when building a budget. Housing, utilities, groceries, transport, debt payments and subscriptions are obvious examples. Irregular costs such as annual insurance, servicing, repairs, gifts, holidays or professional expenses may need a separate monthly allowance in your own budget.</p><p>For vehicle purchases, also consider insurance, fuel, maintenance, tyres, parking and road-related costs. The calculator can help you test the purchase price and finance payment; it cannot automatically know your future running costs.</p><h3>When to run the calculation again</h3><p>Run another scenario when your deposit changes, the APR changes, your income changes, a regular cost is missing, or you want to protect a larger emergency buffer. Comparing two realistic cases is usually more informative than trying to find one “maximum” price.</p></div></section>
-<section class="editorial-section"><div class="editorial-inner"><span class="step">FREQUENT QUESTIONS</span><h2>Affordability calculator FAQs</h2><div class="faq-list"><details><summary>Does this tell me what a lender will approve?</summary><p>No. Lenders use their own affordability tests, income verification, credit information, product rules and other criteria. WorthChex is a household planning tool.</p></details><details><summary>Should I use gross salary or take-home pay?</summary><p>Use the money you actually have available for your monthly budget. For most household affordability decisions, take-home pay is the more useful starting point.</p></details><details><summary>What if I do not know my emergency-fund target?</summary><p>Use a cautious figure that reflects the amount you want to keep available after the purchase. You can then run a second scenario with a larger or smaller buffer to see how sensitive the result is.</p></details><details><summary>Should I include existing debt payments?</summary><p>Yes. If a debt payment is a recurring commitment, including it gives the calculator a more realistic view of remaining monthly room.</p></details></div><p><a href="../money-guides/how-much-car-can-i-afford/">Read the full “How much car can I afford?” guide →</a> · <a href="../methodology/">See the methodology →</a></p></div></section>
-<footer><div class="footer-inner"><div><a href="../" class="logo"><span class="logo-icon">£</span>WorthChex</a><p>Practical tools for clearer money decisions.</p></div><div class="footer-links"><a href="../calculators/">All calculators</a><a href="../money-guides/">Money guides</a><a href="../about/">About</a><a href="../methodology/">Methodology</a><a href="../privacy/">Privacy Policy</a></div></div><div class="footer-bottom"><span>© 2026 WorthChex</span><span>For educational purposes only. Not financial advice.</span></div></footer><script src="../calculator-suite-final.js"></script><script src="../reset-fixes.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free UK affordability calculator for cash or finance purchases. See every key percentage: spending, housing, debt, finance payment, total commitments, remaining income and savings use.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#635bff">
+<link rel="canonical" href="https://worthchex.com/affordability-calculator/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../calculator-v2.css">
+<link rel="stylesheet" href="../content-enhancements.css">
+<title>Affordability Calculator UK | Full Budget & Percentage Breakdown | WorthChex</title>
+</head>
+<body>
+<nav class="navbar" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../" class="logo" aria-label="WorthChex home"><span class="logo-icon">£</span>WorthChex</a>
+    <div class="nav-links">
+      <a href="../savings-calculator/">Savings</a>
+      <a href="../debt-payoff-calculator/">Debt</a>
+      <a href="../calculators/">More calculators</a>
+      <a href="../money-guides/">Money guides</a>
+    </div>
+  </div>
+</nav>
+
+<main class="calculator-page">
+  <div class="breadcrumbs"><a href="../">WorthChex</a> / Affordability calculator</div>
+
+  <header class="page-header">
+    <span class="step">AFFORDABILITY CALCULATOR V4</span>
+    <h1>See exactly what this purchase does to your budget.</h1>
+    <p>Enter your take-home income and real monthly costs. WorthChex shows the pound amounts <strong>and the percentage of income</strong> for existing spending, the new payment, total commitments and what remains.</p>
+  </header>
+
+  <section class="calculator-card">
+    <div class="privacy-notice">
+      <div class="privacy-notice-inner">
+        <div class="privacy-icon" aria-hidden="true">✓</div>
+        <div>
+          <strong>Private, browser-based calculation</strong>
+          <p>Your figures stay in the browser. No bank connection or account is required.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="affordability-steps">
+      <fieldset class="affordability-step">
+        <legend><span>1</span> Income</legend>
+        <p class="affordability-step-help">Use monthly take-home pay — the money actually available after payroll deductions.</p>
+        <label for="income">Monthly take-home income</label>
+        <div class="input-wrapper">
+          <span aria-hidden="true">£</span>
+          <input id="income" type="number" min="0" step="1" placeholder="2,500" inputmode="decimal">
+        </div>
+      </fieldset>
+
+      <fieldset class="affordability-step">
+        <legend><span>2</span> Monthly spending</legend>
+        <p class="affordability-step-help">Include costs you genuinely expect. Annual and irregular costs can be converted to a monthly allowance.</p>
+
+        <div class="affordability-field-grid">
+          <div>
+            <label for="rent">Rent / mortgage</label>
+            <div class="input-wrapper"><span>£</span><input id="rent" type="number" min="0" step="1" inputmode="decimal" placeholder="900"></div>
+          </div>
+          <div>
+            <label for="bills">Council tax, utilities & household bills</label>
+            <div class="input-wrapper"><span>£</span><input id="bills" type="number" min="0" step="1" inputmode="decimal" placeholder="300"></div>
+          </div>
+          <div>
+            <label for="food">Food & groceries</label>
+            <div class="input-wrapper"><span>£</span><input id="food" type="number" min="0" step="1" inputmode="decimal" placeholder="350"></div>
+          </div>
+          <div>
+            <label for="transport">Transport</label>
+            <div class="input-wrapper"><span>£</span><input id="transport" type="number" min="0" step="1" inputmode="decimal" placeholder="200"></div>
+          </div>
+          <div>
+            <label for="childcare">Childcare / dependants <span class="optional">OPTIONAL</span></label>
+            <div class="input-wrapper"><span>£</span><input id="childcare" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+          </div>
+          <div>
+            <label for="debt">Existing debt payments</label>
+            <div class="input-wrapper"><span>£</span><input id="debt" type="number" min="0" step="1" inputmode="decimal" placeholder="150"></div>
+          </div>
+          <div>
+            <label for="subscriptions">Subscriptions & discretionary spending</label>
+            <div class="input-wrapper"><span>£</span><input id="subscriptions" type="number" min="0" step="1" inputmode="decimal" placeholder="100"></div>
+          </div>
+          <div>
+            <label for="irregular">Annual / irregular costs (monthly average) <span class="optional">OPTIONAL</span></label>
+            <div class="input-wrapper"><span>£</span><input id="irregular" type="number" min="0" step="1" inputmode="decimal" placeholder="50"></div>
+            <p class="field-note">Example: £600 a year of insurance or servicing = about £50 a month.</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="affordability-step">
+        <legend><span>3</span> Savings safety</legend>
+        <p class="affordability-step-help">These figures matter for cash purchases and for checking whether a deposit leaves enough money in reserve.</p>
+
+        <div class="affordability-field-grid two">
+          <div>
+            <label for="savings">Current savings <span class="optional">OPTIONAL</span></label>
+            <div class="input-wrapper"><span>£</span><input id="savings" type="number" min="0" step="1" inputmode="decimal" placeholder="5,000"></div>
+          </div>
+          <div>
+            <label for="emergency">Emergency-fund target <span class="optional">OPTIONAL</span></label>
+            <div class="input-wrapper"><span>£</span><input id="emergency" type="number" min="0" step="1" inputmode="decimal" placeholder="3,000"></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="affordability-step purchase-step">
+        <legend><span>4</span> Purchase scenario</legend>
+        <p class="affordability-step-help">Choose cash or finance. Finance-specific inputs only appear when finance is selected.</p>
+
+        <label for="purchase">Purchase price</label>
+        <div class="input-wrapper"><span>£</span><input id="purchase" type="number" min="0" step="100" inputmode="decimal" placeholder="20,000"></div>
+
+        <label for="purchaseType">How are you paying?</label>
+        <div class="input-wrapper">
+          <select id="purchaseType">
+            <option value="cash" selected>Cash — pay from savings</option>
+            <option value="finance">Finance — deposit + monthly payments</option>
+          </select>
+        </div>
+
+        <div class="affordability-finance-panel" data-affordability-finance hidden>
+          <div class="affordability-finance-heading">
+            <strong>Finance details</strong>
+            <span>These fields calculate the actual modelled payment and total interest.</span>
+          </div>
+          <div class="affordability-field-grid">
+            <div>
+              <label for="deposit">Deposit</label>
+              <div class="input-wrapper"><span>£</span><input id="deposit" type="number" min="0" step="100" inputmode="decimal" placeholder="2,000"></div>
+            </div>
+            <div>
+              <label for="financeRate">Finance APR</label>
+              <div class="input-wrapper"><input id="financeRate" type="number" min="0" step="0.01" value="8.9" inputmode="decimal"><span>%</span></div>
+            </div>
+            <div>
+              <label for="financeTerm">Finance term</label>
+              <div class="input-wrapper"><input id="financeTerm" type="number" min="1" max="20" step="1" value="5" inputmode="numeric"><span>years</span></div>
+            </div>
+            <div>
+              <label for="financeExtra">Extra monthly payment <span class="optional">OPTIONAL</span></label>
+              <div class="input-wrapper"><span>£</span><input id="financeExtra" type="number" min="0" step="10" value="0" inputmode="decimal"></div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="affordability-action-note">
+      <strong>What the result will show</strong>
+      <p>Every key ratio is calculated from your take-home income. You will see housing %, debt %, existing spending %, payment %, total commitments %, remaining income %, and savings-use percentages where the information is available.</p>
+    </div>
+
+    <button id="calculateButton" class="calculate-button" type="button">Analyse my affordability <span aria-hidden="true">→</span></button>
+    <button id="resetButton" class="reset-button" type="button">Clear everything</button>
+    <div id="result" class="result hidden" aria-live="polite"></div>
+  </section>
+
+  <section class="information-section">
+    <div class="information-inner narrow">
+      <span class="step">HOW THE PERCENTAGES WORK</span>
+      <h2>Transparent ratios instead of a made-up “affordability score”.</h2>
+      <p>WorthChex does not turn your answers into a single score. The result shows the underlying maths so you can audit it: existing spending ÷ take-home income, new payment ÷ take-home income, and total monthly commitments ÷ take-home income. For a cash purchase, it also shows how much of the savings entered would be used and how much of the emergency target would remain covered.</p>
+      <p>Lenders use their own detailed affordability assessments based on income, expenditure and other circumstances. FCA material states that affordability assessments consider income and expenditure rather than relying on one universal income or expenditure threshold. <a href="https://www.fca.org.uk/consumers/financial-impact-rising-costs-living/support-mortgages-interest-rates" target="_blank" rel="noopener noreferrer">Read FCA guidance on mortgage affordability →</a></p>
+    </div>
+  </section>
+</main>
+
+<section class="editorial-section">
+  <div class="editorial-inner">
+    <span class="step">HOW TO READ THE RESULT</span>
+    <h2>Affordability is a budget calculation, not a single percentage.</h2>
+    <div class="content-grid">
+      <article class="content-card">
+        <h3>Existing spending %</h3>
+        <p>This is the share of your take-home income already used by the costs you entered. A complete figure is more useful than a low figure built from missing costs.</p>
+      </article>
+      <article class="content-card">
+        <h3>New payment %</h3>
+        <p>For finance, this shows the new monthly payment as a percentage of take-home income. It is displayed separately so you can see exactly what the purchase adds.</p>
+      </article>
+      <article class="content-card">
+        <h3>Total commitments %</h3>
+        <p>This combines your entered spending with the new payment. It is the clearest percentage for seeing how much of your monthly income has already been allocated in the scenario.</p>
+      </article>
+    </div>
+    <div class="example-box">
+      <strong>Why the calculator does not use a universal pass/fail percentage:</strong>
+      <p>MoneyHelper says people typically spend around 28–35% of income on a mortgage, but it also says there is no specific percentage that is right for everyone. A car payment, personal loan or cash purchase should not automatically be judged using a mortgage rule of thumb. Your actual income, spending and other commitments matter.</p>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-section alt">
+  <div class="editorial-inner">
+    <span class="step">WHAT TO INCLUDE</span>
+    <h2>The biggest accuracy improvement is complete inputs.</h2>
+    <p>Include annual insurance, servicing, school costs, subscriptions and other occasional spending by converting them into a monthly amount. If you spend £600 during the year on a cost that is not paid monthly, budgeting roughly £50 a month keeps the calculation from overstating the spare cash in an ordinary month.</p>
+    <p>For a vehicle purchase, remember that the finance payment is not the same as the cost of owning the vehicle. Insurance, fuel, tyres, servicing, parking, tax and repairs can sit outside the finance agreement.</p>
+    <p>For borrowing, compare the quoted APR and actual agreement with the calculator. The calculator can model the mathematics; it cannot see lender-specific underwriting, fees, promotional offers or contract terms.</p>
+  </div>
+</section>
+
+<section class="editorial-section">
+  <div class="editorial-inner">
+    <span class="step">FREQUENT QUESTIONS</span>
+    <h2>Affordability calculator FAQs</h2>
+    <div class="faq-list">
+      <details><summary>Does this tell me what a lender will approve?</summary><p>No. Lenders use their own affordability tests, income verification, credit information, product rules and other criteria. WorthChex shows the household-budget maths from the figures you enter.</p></details>
+      <details><summary>What percentages should I look at first?</summary><p>Start with existing spending %, then the new payment % if you are financing, and finally total commitments % and remaining income %. These figures show where your money is going without hiding the calculation behind a score.</p></details>
+      <details><summary>Should I use gross salary or take-home pay?</summary><p>Use take-home pay for this calculator because the spending decision is based on the money available to your household after payroll deductions.</p></details>
+      <details><summary>Why do you ask for annual or irregular costs?</summary><p>Because a monthly budget can look artificially generous when annual insurance, repairs, servicing, holidays or similar costs are missing. Converting those costs into a monthly allowance makes the scenario more realistic.</p></details>
+      <details><summary>What if I do not know my emergency-fund target?</summary><p>Leave it blank or enter the amount you want to keep available. The result will show the savings position without pretending there is a universal emergency-fund number.</p></details>
+    </div>
+    <p><a href="../money-guides/how-much-car-can-i-afford/">Read the car affordability guide →</a> · <a href="../money-guides/how-to-build-a-household-budget/">Read the household-budget guide →</a> · <a href="../methodology/">See the methodology →</a></p>
+    <p class="disclaimer">Educational planning information only. Not financial advice. Your actual affordability depends on your circumstances and the terms of the specific product or purchase.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div><a href="../" class="logo" aria-label="WorthChex home"><span class="logo-icon">£</span>WorthChex</a><p>Practical tools for clearer money decisions.</p></div>
+    <div class="footer-links">
+      <a href="../calculators/">All calculators</a>
+      <a href="../money-guides/">Money guides</a>
+      <a href="../about/">About</a>
+      <a href="../methodology/">Methodology</a>
+      <a href="../privacy/">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 WorthChex</span><span>For educational purposes only. Not financial advice.</span></div>
+</footer>
+
+<script src="../calculator-suite-final.js"></script>
+<script src="../reset-fixes.js"></script>
+</body>
+</html>
