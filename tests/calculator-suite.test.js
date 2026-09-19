@@ -36,4 +36,66 @@ assert.ok(loan);
 assert.ok(loan.payment > 0);
 assert.ok(loan.total > 10000);
 
+
+const affordabilityCash = W.affordabilityPlan({
+  income: 3000,
+  purchase: 12000,
+  purchaseType: "cash",
+  housing: 900,
+  bills: 300,
+  food: 350,
+  transport: 200,
+  childcare: 0,
+  debt: 150,
+  subscriptions: 100,
+  irregular: 50,
+  savings: 20000,
+  emergency: 5000,
+  hasSavings: true,
+  hasEmergency: true
+});
+assert.ok(affordabilityCash);
+assert.equal(affordabilityCash.valid, true);
+assert.equal(affordabilityCash.existingSpending, 2050);
+assert.equal(affordabilityCash.ratios.existingSpending, 2050 / 3000 * 100);
+assert.equal(affordabilityCash.ratios.housing, 900 / 3000 * 100);
+assert.equal(affordabilityCash.ratios.debt, 150 / 3000 * 100);
+assert.equal(affordabilityCash.savingsAfterPurchase, 8000);
+assert.equal(affordabilityCash.ratios.upfrontCashOfSavings, 60);
+assert.equal(affordabilityCash.ratios.reserveCoverage, 160);
+
+const affordabilityFinance = W.affordabilityPlan({
+  income: 3000,
+  purchase: 20000,
+  purchaseType: "finance",
+  housing: 900,
+  bills: 300,
+  food: 350,
+  transport: 200,
+  childcare: 0,
+  debt: 150,
+  subscriptions: 100,
+  irregular: 50,
+  savings: 10000,
+  emergency: 5000,
+  hasSavings: true,
+  hasEmergency: true,
+  deposit: 2000,
+  financeRate: 8.9,
+  financeTerm: 5,
+  financeExtra: 0
+});
+assert.ok(affordabilityFinance);
+assert.equal(affordabilityFinance.valid, true);
+assert.equal(affordabilityFinance.deposit, 2000);
+assert.equal(affordabilityFinance.financedAmount, 18000);
+assert.ok(affordabilityFinance.payment > 0);
+assert.ok(affordabilityFinance.financeInterest > 0);
+assert.ok(Math.abs(affordabilityFinance.ratios.payment - affordabilityFinance.payment / 3000 * 100) < 1e-12);
+assert.ok(Math.abs(affordabilityFinance.ratios.totalCommitments - (2050 + affordabilityFinance.payment) / 3000 * 100) < 1e-12);
+assert.ok(Math.abs(affordabilityFinance.ratios.remainingIncome - (3000 - 2050 - affordabilityFinance.payment) / 3000 * 100) < 1e-12);
+assert.equal(affordabilityFinance.ratios.upfrontCashOfSavings, 20);
+
+assert.equal(W.affordabilityPlan({ income: 3000, purchase: 10000, purchaseType: "finance", financeTerm: 0 }).valid, false);
+
 console.log("WorthChex final calculator suite tests passed.");
