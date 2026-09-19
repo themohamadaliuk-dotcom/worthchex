@@ -20,3 +20,45 @@
 .faq-list details p { margin: 12px 0 0; font-size: 15px; }
 .source-note { font-size: 13px !important; color: #7b8394 !important; }
 @media (max-width: 800px) { .content-grid { grid-template-columns: 1fr; } .editorial-section { padding: 60px 20px; } }
+
+/* Affordability calculator V4 */
+.affordability-steps { display: grid; gap: 18px; }
+.affordability-step { margin: 0; min-width: 0; padding: 22px; background: #fbfcff; border: 1px solid #e5e7ef; border-radius: 18px; }
+.affordability-step legend { padding: 0 8px 0 0; color: #151827; font-size: 17px; font-weight: 800; }
+.affordability-step legend span { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; border-radius: 9px; background: #eeeaff; color: #5148e5; font-size: 13px; vertical-align: middle; }
+.affordability-step-help { margin: 4px 0 14px; color: #7a8292; font-size: 12px; line-height: 1.55; }
+.affordability-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+.affordability-field-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.affordability-field-grid > div { min-width: 0; }
+.affordability-field-grid label { margin-top: 14px; }
+.affordability-field-grid .field-note { margin-bottom: 0; }
+.affordability-finance-panel { margin-top: 18px; padding: 18px; background: #f5f3ff; border: 1px solid #dedaff; border-radius: 15px; }
+.affordability-finance-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
+.affordability-finance-heading strong { color: #2e296d; font-size: 14px; }
+.affordability-finance-heading span { color: #777e8f; font-size: 12px; }
+.affordability-action-note { margin: 20px 0 16px; padding: 16px 18px; background: #f8f9fc; border: 1px solid #e7e9f0; border-radius: 14px; }
+.affordability-action-note strong { display: block; margin-bottom: 4px; color: #303548; font-size: 13px; }
+.affordability-action-note p { margin: 0; color: #737b8d; font-size: 12px; line-height: 1.6; }
+.affordability-result-hero { margin-bottom: 18px; padding: 22px; background: linear-gradient(135deg, #f0efff, #f7f6ff); border: 1px solid #dedcff; border-radius: 18px; text-align: center; }
+.affordability-result-hero .big-number { margin: 3px 0 2px; font-size: 34px; }
+.affordability-result-sub { display: block; font-size: 12px; line-height: 1.5; }
+.affordability-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+.affordability-metric { padding: 15px; background: #fbfcff; border: 1px solid #e5e7ef; border-radius: 14px; }
+.affordability-metric span, .affordability-metric small { display: block; color: #737b8d; }
+.affordability-metric span { font-size: 11px; line-height: 1.45; }
+.affordability-metric strong { display: block; margin: 5px 0 2px; color: #151827; font-size: 18px; }
+.affordability-metric small { font-size: 10px; line-height: 1.45; }
+.affordability-detail-box { margin-top: 18px; }
+.affordability-breakdown { margin-top: 22px; padding-top: 4px; }
+.affordability-breakdown-title { margin-bottom: 8px; color: #303548; font-size: 14px; font-weight: 800; }
+.affordability-breakdown-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid #eef0f4; }
+.affordability-breakdown-row span { color: #737b8d; font-size: 13px; }
+.affordability-breakdown-row strong { color: #151827; font-size: 13px; }
+.affordability-breakdown-row small { min-width: 120px; color: #8a91a1; text-align: right; font-size: 11px; }
+.affordability-reference-note { margin-top: 22px; padding: 17px; background: #fafbfe; border: 1px solid #e4e7ee; border-radius: 14px; }
+.affordability-reference-note strong { display: block; margin-bottom: 6px; color: #303548; font-size: 13px; }
+.affordability-reference-note p { margin: 0 0 10px; color: #687186; font-size: 12px; line-height: 1.65; }
+.affordability-reference-note a { font-size: 12px; font-weight: 750; }
+@media (max-width: 850px) { .affordability-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .affordability-field-grid, .affordability-field-grid.two { grid-template-columns: 1fr; } .affordability-summary-grid { grid-template-columns: 1fr 1fr; } .affordability-step { padding: 19px 16px; } .affordability-finance-heading { display: block; } .affordability-finance-heading span { display: block; margin-top: 3px; } .affordability-breakdown-row { grid-template-columns: 1fr auto; } .affordability-breakdown-row small { grid-column: 1 / -1; min-width: 0; text-align: left; } }
+@media (max-width: 420px) { .affordability-summary-grid { grid-template-columns: 1fr; } .affordability-result-hero .big-number { font-size: 30px; } }
