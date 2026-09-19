@@ -218,7 +218,7 @@
     const monthlyAfterPayment = disposableBeforePayment - payment;
 
     const pctOfIncome = value => income > 0 ? (value / income) * 100 : null;
-    const pctOfDisposable = disposableBeforePayment > 0 ? (value / disposableBeforePayment) * 100 : null;
+    const pctOfDisposable = value => disposableBeforePayment > 0 ? (value / disposableBeforePayment) * 100 : null;
 
     return {
       valid: true,
