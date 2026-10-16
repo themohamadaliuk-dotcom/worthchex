@@ -53,7 +53,10 @@
           if (!control.isConnected) return;
 
           if (control.tagName === "SELECT") {
-            control.selectedIndex = -1;
+            // Return each dropdown to its default choice so the form stays valid.
+            const options = Array.from(control.options || []);
+            const preferred = options.findIndex(option => option.defaultSelected);
+            control.selectedIndex = preferred >= 0 ? preferred : 0;
           } else if (control.type === "checkbox" || control.type === "radio") {
             control.checked = false;
           } else {
