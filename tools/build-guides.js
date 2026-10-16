@@ -15,11 +15,14 @@ const m2 = v => F.money(v, 2);
 const k = n => `£${(n / 1000).toLocaleString("en-GB")}k`;
 const comma = n => `£${n.toLocaleString("en-GB")}`;
 
-function page({ slug, title, description, eyebrow, h1, lead, body }) {
+function page({ slug, title, description, eyebrow, h1, lead, body, meta }) {
+  const reviewed = meta === "evergreen"
+    ? `<span><strong>Last reviewed:</strong> ${REVIEWED}</span><span><strong>Figures:</strong> worked out with the WorthChex calculators</span>`
+    : `<span><strong>Tax year:</strong> ${YEAR}</span><span><strong>Last reviewed:</strong> ${REVIEWED}</span>`;
   const html = `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${description}"><meta name="robots" content="index, follow"><meta name="theme-color" content="#635bff"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://worthchex.com/money-guides/${slug}/"><title>${title}</title>
 </head><body>
 <nav class="navbar" aria-label="Main navigation"></nav>
-<main id="main"><section class="about-section"><div class="about-inner"><div class="breadcrumbs"><a href="/">WorthChex</a> &nbsp;›&nbsp; <a href="/money-guides/">Money guides</a></div><span class="step">${eyebrow}</span><h1>${h1}</h1><p>${lead}</p><div class="reviewed-line"><span><strong>Tax year:</strong> ${YEAR}</span><span><strong>Last reviewed:</strong> ${REVIEWED}</span></div></div></section>
+<main id="main"><section class="about-section"><div class="about-inner"><div class="breadcrumbs"><a href="/">WorthChex</a> &nbsp;›&nbsp; <a href="/money-guides/">Money guides</a></div><span class="step">${eyebrow}</span><h1>${h1}</h1><p>${lead}</p><div class="reviewed-line">${reviewed}</div></div></section>
 ${body}
 </main>
 <footer></footer>
@@ -214,5 +217,61 @@ function studentLoanGuide() {
   });
 }
 
-const made = [...SALARIES.map(salaryGuide), lbttGuide(), lttGuide(), secondHomeGuide(), studentLoanGuide()];
+// ---------------------------------------------------------------- salary after tax hub
+function salaryHub() {
+  const list = [15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 70000, 80000, 90000, 100000, 110000, 125000, 150000];
+  const rows = list.map(s => {
+    const r = F.takeHomePay(s), sc = F.takeHomePay(s, { region: "scotland" });
+    const label = SALARIES.includes(s) ? `<a href="/money-guides/${salarySlug(s)}/">${comma(s)}</a>` : comma(s);
+    return [label, m0(r.tax + r.ni), m0(r.net), m0(r.monthly), m0(r.weekly), m0(sc.monthly)];
+  });
+  return page({
+    slug: "salary-after-tax",
+    title: `Salary After Tax UK ${YEAR}: Take-Home Pay Table £15k to £150k | WorthChex`,
+    description: `UK salary after tax table for ${YEAR}: yearly, monthly and weekly take-home pay from £15,000 to £150,000, with Scotland figures, tax bands and how it is worked out.`,
+    eyebrow: "PAY GUIDE",
+    h1: `Salary after tax: UK take-home pay table for ${YEAR}`,
+    lead: `Find your salary below to see what you take home each year, month and week after Income Tax and National Insurance. Figures are for the ${YEAR} tax year with a standard tax code and no pension or student loan.`,
+    body:
+      section(`<span class="step">TAKE-HOME PAY TABLE</span><h2>How much you take home at each salary.</h2>${table(["Salary", "Tax + NI a year", "Take-home a year", "A month", "A week", "A month in Scotland"], rows)}
+<p class="source-note">England, Wales and Northern Ireland unless stated. Assumes tax code 1257L, National Insurance category A, and no pension, student loan or benefits in kind. Click a highlighted salary for a full breakdown.</p>
+<div class="content-callout"><strong>Your exact take-home pay</strong><p>Add your pension, student loan and region in the <a href="/take-home-pay-calculator/">take-home pay calculator</a>.</p></div>`) +
+      section(`<span class="step">THE RATES</span><h2>${YEAR} Income Tax and National Insurance rates.</h2><h3>Income Tax (England, Wales and Northern Ireland)</h3>${table(["Band", "Taxable income", "Rate"], [["Personal Allowance", "Up to £12,570", "0%"], ["Basic rate", "£12,571 to £50,270", "20%"], ["Higher rate", "£50,271 to £125,140", "40%"], ["Additional rate", "Over £125,140", "45%"]])}
+<p>The Personal Allowance shrinks by £1 for every £2 of income over £100,000, so it is gone completely at £125,140.</p>
+<h3>Income Tax in Scotland</h3>${table(["Band", "Income", "Rate"], [["Starter", "£12,571 to £16,537", "19%"], ["Basic", "£16,538 to £29,526", "20%"], ["Intermediate", "£29,527 to £43,662", "21%"], ["Higher", "£43,663 to £75,000", "42%"], ["Advanced", "£75,001 to £125,140", "45%"], ["Top", "Over £125,140", "48%"]])}
+<h3>Employee National Insurance (category A)</h3>${table(["Earnings", "Rate"], [["Up to £12,570 a year", "0%"], ["£12,570 to £50,270", "8%"], ["Over £50,270", "2%"]])}`, true) +
+      section(`<span class="step">HOW IT WORKS</span><h2>How take-home pay is worked out.</h2><ol class="guide-steps"><li>Take off the tax-free Personal Allowance (£12,570 for most people).</li><li>Tax the rest in slices: 20% on the first £37,700 of taxable income, then 40%, then 45%. Only the slice in each band is taxed at that rate.</li><li>Work out National Insurance separately: 8% between £12,570 and £50,270, then 2% above.</li><li>Take off any pension contribution and student loan repayment.</li><li>What is left is your take-home pay.</li></ol>
+<div class="example-box"><strong>Example, £40,000:</strong> £27,430 is taxable, so Income Tax is £5,486. National Insurance is 8% of £27,430 = £2,194. Take-home pay is £32,320 a year, or £2,693 a month.</div>`) +
+      section(`<span class="step">FREQUENT QUESTIONS</span><h2>Salary after tax FAQs</h2>${faq([
+        ["Why is my take-home pay lower than this table?", "The table has no pension or student loan. A 5% workplace pension and a student loan can each reduce monthly pay by £100 or more. Your tax code, benefits in kind or other payroll deductions can also make a difference."],
+        ["Does a pay rise ever reduce take-home pay?", "No. Tax is charged in bands, so moving into a higher band only affects the money above the threshold. Every pay rise increases take-home pay, although between £100,000 and £125,140 you keep only about 38p of each extra pound."],
+        ["Is take-home pay different in Scotland?", "Yes. Scotland has six Income Tax bands. People earning under about £30,000 pay slightly less than elsewhere in the UK, and people earning more pay more. National Insurance is the same across the UK."],
+        ["How do I work out my hourly rate?", "Divide your annual salary by the number of hours you work in a year. For a 37.5-hour week that is 1,950 hours, so £30,000 is about £15.38 an hour before tax."],
+      ])}<p>Detailed guides: ${SALARIES.map(x => `<a href="/money-guides/${salarySlug(x)}/">${k(x)} after tax</a>`).join(" · ")} · <a href="/money-guides/student-loan-repayments/">Student loan repayments</a></p><p class="source-note">Sources: <a href="https://www.gov.uk/income-tax-rates" target="_blank" rel="noopener noreferrer">GOV.UK Income Tax rates</a> · <a href="https://www.gov.uk/scottish-income-tax" target="_blank" rel="noopener noreferrer">Scottish Income Tax</a> · <a href="https://www.gov.uk/national-insurance/how-much-you-pay" target="_blank" rel="noopener noreferrer">GOV.UK National Insurance</a>. Estimates for planning only, not tax advice.</p>`, true),
+  });
+}
+
+// ---------------------------------------------------------------- contact page
+// Set the public contact address here (or pass CONTACT_EMAIL=...) to publish /contact/.
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "";
+function contactPage(email) {
+  const dir = path.join(ROOT, "contact");
+  if (!email) return null;
+  const html = `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Contact WorthChex about a calculator result, a correction, a suggestion for a new tool or guide, or advertising and privacy questions."><meta name="robots" content="index, follow"><link rel="canonical" href="https://worthchex.com/contact/"><title>Contact WorthChex | WorthChex</title>
+</head><body>
+<nav class="navbar" aria-label="Main navigation"></nav>
+<main id="main"><section class="about-section"><div class="about-inner"><div class="breadcrumbs"><a href="/">WorthChex</a> &nbsp;›&nbsp; Contact</div><span class="step">CONTACT</span><h1>Contact WorthChex</h1><p>Spotted a figure that looks wrong, or have an idea for a calculator or guide? We read every message.</p></div></section>
+${section(`<span class="step">EMAIL</span><h2>Get in touch.</h2><p class="contact-email"><a href="mailto:${email}">${email}</a></p><p>We aim to reply within 3 working days.</p><div class="content-grid"><article class="content-card"><h3>Corrections</h3><p>Tell us which page, the figures you entered and what you expected. Accuracy matters to us: we check every report against the official source and fix confirmed errors quickly.</p></article><article class="content-card"><h3>Suggestions</h3><p>Ideas for new calculators, guides or features are very welcome, especially questions you could not find an answer to.</p></article><article class="content-card"><h3>Privacy and advertising</h3><p>Questions about cookies or ads? Read our <a href="/privacy/">privacy policy</a> first; it explains how Google advertising works on this site.</p></article></div>`)}
+${section(`<span class="step">PLEASE NOTE</span><h2>What we can and cannot help with.</h2><ul><li>We cannot give personal financial, tax or legal advice, or comment on your individual situation. For free, impartial help, try <a href="https://www.moneyhelper.org.uk/" target="_blank" rel="noopener noreferrer">MoneyHelper</a> or <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer">Citizens Advice</a>.</li><li>For questions about your own tax, contact <a href="https://www.gov.uk/contact-hmrc" target="_blank" rel="noopener noreferrer">HMRC</a>.</li><li>Please never send us bank details, passwords or other sensitive personal information.</li></ul>`, true)}
+</main>
+<footer></footer>
+</body></html>
+`;
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), html);
+  return "contact";
+}
+
+const made = [salaryHub(), ...SALARIES.map(salaryGuide), lbttGuide(), lttGuide(), secondHomeGuide(), studentLoanGuide(),
+  ...require("./guides-evergreen.js")({ page, section, table, faq, stats, F, m0, m2, comma }), contactPage(CONTACT_EMAIL)].filter(Boolean);
 console.log("Built guides:", made.join(", "));

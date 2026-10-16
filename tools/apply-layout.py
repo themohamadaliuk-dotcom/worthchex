@@ -89,7 +89,7 @@ FOOTER = (
     '<div><h2>Pay &amp; tax</h2>' + flist([("/take-home-pay-calculator/", "Take-home pay"), ("/salary-calculator/", "Salary & pay rise"), ("/vat-calculator/", "VAT")]) + '</div>'
     '<div><h2>Home &amp; borrowing</h2>' + flist([("/mortgage-calculator/", "Mortgage"), ("/stamp-duty-calculator/", "Stamp Duty"), ("/affordability-calculator/", "Affordability"), ("/car-finance-calculator/", "Car finance"), ("/personal-loan-calculator/", "Personal loan"), ("/debt-payoff-calculator/", "Debt payoff")]) + '</div>'
     '<div><h2>Saving</h2>' + flist([("/savings-calculator/", "Savings goal"), ("/compound-interest-calculator/", "Compound interest"), ("/money-guides/", "Money guides")]) + '</div>'
-    '<div><h2>WorthChex</h2>' + flist([("/calculators/", "All calculators"), ("/about/", "About"), ("/methodology/", "Methodology"), ("/privacy/", "Privacy policy")]) + '</div>'
+    '<div><h2>WorthChex</h2>' + flist([("/calculators/", "All calculators"), ("/about/", "About"), ("/methodology/", "Methodology"), ("/privacy/", "Privacy policy")] + ([("/contact/", "Contact")] if os.path.exists(os.path.join(ROOT, "contact", "index.html")) else [])) + '</div>'
     '</div>'
     '<div class="footer-bottom"><span>© 2026 WorthChex</span>'
     '<p>WorthChex provides estimates for education and planning. It is not financial, tax or legal advice. Check important decisions with the official source or a regulated adviser.</p></div>'
