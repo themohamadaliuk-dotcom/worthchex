@@ -253,7 +253,7 @@ function salaryHub() {
 
 // ---------------------------------------------------------------- contact page
 // Set the public contact address here (or pass CONTACT_EMAIL=...) to publish /contact/.
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "";
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "worthchex.contact@gmail.com";
 function contactPage(email) {
   const dir = path.join(ROOT, "contact");
   if (!email) return null;
