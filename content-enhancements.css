@@ -62,3 +62,19 @@
 @media (max-width: 850px) { .affordability-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .affordability-field-grid, .affordability-field-grid.two { grid-template-columns: 1fr; } .affordability-summary-grid { grid-template-columns: 1fr 1fr; } .affordability-step { padding: 19px 16px; } .affordability-finance-heading { display: block; } .affordability-finance-heading span { display: block; margin-top: 3px; } .affordability-breakdown-row { grid-template-columns: 1fr auto; } .affordability-breakdown-row small { grid-column: 1 / -1; min-width: 0; text-align: left; } }
 @media (max-width: 420px) { .affordability-summary-grid { grid-template-columns: 1fr; } .affordability-result-hero .big-number { font-size: 30px; } }
+
+/* Data-driven guides */
+.guide-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 24px 0; }
+.guide-stat { padding: 18px; background: #fff; border: 1px solid #e7e9f0; border-radius: 16px; box-shadow: 0 10px 26px rgba(24, 30, 60, 0.05); }
+.guide-stat span { display: block; color: #7a8292; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.guide-stat strong { display: block; margin-top: 6px; color: #151827; font-size: 26px; letter-spacing: -.5px; }
+.guide-stat small { display: block; margin-top: 2px; color: #8a91a1; font-size: 12px; }
+.guide-stat:first-child { background: #f0efff; border-color: #dedcff; }
+.guide-stat:first-child strong { color: #4038c9; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.guide-table { background: #fff; border-radius: 14px; }
+.guide-table.wide { min-width: 520px; }
+.guide-steps { color: #4d5466; line-height: 1.8; padding-left: 22px; }
+.guide-steps li { margin-bottom: 8px; }
+.about-inner .breadcrumbs { margin-bottom: 14px; }
+@media (max-width: 760px) { .guide-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .guide-stat strong { font-size: 22px; } }
