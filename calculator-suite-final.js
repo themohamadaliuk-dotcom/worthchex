@@ -1,4 +1,4 @@
-/* WorthChex Calculator Suite — production V3 engine */
+/* WorthChex calculator suite: affordability, savings, debt, mortgage and personal-loan tools */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== "undefined" && module.exports) module.exports = api;
@@ -7,8 +7,16 @@
   "use strict";
 
   const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-  const money = n => `£${Number(n || 0).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const money = n => {
+    const v = Number(n || 0);
+    return `${v < 0 ? "-" : ""}£${Math.abs(v).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+  // Nominal annual rate (e.g. a mortgage rate) -> monthly rate.
   const monthlyRate = annual => Math.max(0, annual) / 100 / 12;
+  // UK APRs are annual effective rates -> equivalent monthly rate.
+  const aprMonthly = apr => Math.max(0, apr) === 0 ? 0 : Math.pow(1 + Math.max(0, apr) / 100, 1 / 12) - 1;
+  // Convert an APR into the nominal annual rate (monthly compounding) used by the annuity helpers.
+  const aprToNominal = apr => aprMonthly(apr) * 12 * 100;
 
   function annuityPayment(principal, annualRate, periods, periodsPerYear = 12) {
     if (principal <= 0 || periods <= 0) return 0;
@@ -37,9 +45,9 @@
     return { basePayment: base, payment, periods, interest, total: principal + interest };
   }
 
-  function debtPlan(balance, annualRate, payment) {
+  function debtPlan(balance, apr, payment) {
     if (balance <= 0 || payment <= 0) return null;
-    const r = monthlyRate(annualRate);
+    const r = aprMonthly(apr);
     if (r === 0) return { months: Math.ceil(balance / payment), interest: 0, total: balance };
     if (payment <= balance * r) return null;
     let left = balance, interest = 0, months = 0;
@@ -194,7 +202,7 @@
       if (financedAmount > 0) {
         const plan = amortise(
           financedAmount,
-          Math.max(0, Number(inputs.financeRate || 0)),
+          aprToNominal(Math.max(0, Number(inputs.financeRate || 0))),
           Math.max(1, termYears * 12),
           Math.max(0, Number(inputs.financeExtra || 0))
         );
@@ -344,7 +352,7 @@
           <div class="affordability-result-hero">
             <span class="mini-label">${plan.mode === "finance" ? "Money left after current spending + payment" : "Monthly disposable income before this cash purchase"}</span>
             <strong class="big-number">${money(plan.mode === "finance" ? plan.monthlyAfterPayment : plan.disposableBeforePayment)}</strong>
-            <span class="affordability-result-sub ${remainingClass}">${pct(plan.mode === "finance" ? plan.ratios.remainingIncome : plan.ratios.existingSpending)} of take-home income represented by this figure</span>
+            <span class="affordability-result-sub ${remainingClass}">${pct(plan.ratios.remainingIncome)} of take-home income</span>
           </div>
           <div class="affordability-summary-grid">
             <div class="affordability-metric"><span>Existing spending</span><strong>${money(plan.existingSpending)}</strong><small>${pct(plan.ratios.existingSpending)} of income</small></div>
@@ -424,8 +432,8 @@
           months=1;while(months<=1200&&monthlyFutureValue(current,monthly,rate,months,Number($("savingsCompounding")?.value||12))<goal)months++;if(months>1200)return show("savingsResult",'<h2 class="bad">The current plan does not reach the goal within 100 years</h2><p>Increase the contribution or review the target.</p>');
         }
         const value=monthlyFutureValue(current,monthly,rate,months,Number($("savingsCompounding")?.value||12));const contributions=current+monthly*months;const growth=Math.max(0,value-contributions);const date=new Date();date.setMonth(date.getMonth()+months);
-        const faster25=mode==="monthly"?Math.max(1,Math.ceil(months*monthly/Math.max(1,monthly+25))):null;const faster50=mode==="monthly"?Math.max(1,Math.ceil(months*monthly/Math.max(1,monthly+50))):null;
-        show("savingsResult",`<div class="score-circle"><span>${Math.min(100,Math.round(current/goal*100))}</span><small>% there</small></div><h2>${mode==="date"?`Save about ${money(monthly)} a month`:`Goal in about ${months} months`}</h2>${stat("Target",money(goal))}${stat("Current savings",money(current))}${stat("Monthly contribution",money(monthly))}${stat("Estimated growth",money(growth))}${stat("Estimated value",money(value))}${stat("Estimated goal month",date.toLocaleDateString("en-GB",{month:"long",year:"numeric"}))}${mode==="monthly"?`<div class="what-if-box"><strong>What if you save more?</strong>${stat("+£25/month",`${faster25} months`)}${stat("+£50/month",`${faster50} months`)}</div>`:""}<p class="disclaimer">Uses a constant rate assumption. Actual savings rates, tax and contributions can change.</p>`);
+        const comp=Number($("savingsCompounding")?.value||12);const monthsFor=extra=>{let m=1;while(m<=1200&&monthlyFutureValue(current,monthly+extra,rate,m,comp)<goal)m++;return m;};const faster25=mode==="monthly"?monthsFor(25):null;const faster50=mode==="monthly"?monthsFor(50):null;
+        show("savingsResult",`<div class="score-circle"><span>${Math.min(100,Math.round(current/goal*100))}</span><small>% there</small></div><h2>${mode==="date"?`Save about ${money(monthly)} a month`:`Goal in about ${months} months`}</h2>${stat("Target",money(goal))}${stat("Current savings",money(current))}${stat("Monthly contribution",money(monthly))}${stat("Estimated growth",money(growth))}${stat("Estimated value",money(value))}${stat("Estimated goal month",date.toLocaleDateString("en-GB",{month:"long",year:"numeric"}))}${mode==="monthly"?`<div class="what-if-box"><strong>What if you save more?</strong>${stat(`Save ${money(monthly+25)} a month`,`${faster25} months (${months-faster25} sooner)`)}${stat(`Save ${money(monthly+50)} a month`,`${faster50} months (${months-faster50} sooner)`)}</div>`:""}<p class="disclaimer">Uses a constant rate assumption. Actual savings rates, tax and contributions can change.</p>`);
       });
       $("savingsResetButton")?.addEventListener("click",()=>clear(["currentSavings","savingsGoal","monthlySaving","savingsRate","savingsTargetDate"],"savingsResult"));
     }
@@ -433,12 +441,12 @@
     if ($("debtCalculateButton")) {
       const toggle=()=>{const mode=$("debtMode")?.value||"payment";document.querySelectorAll("[data-debt-target]").forEach(el=>el.hidden=el.dataset.debtTarget!==mode);};
       toggle();$("debtMode")?.addEventListener("change",toggle);
-      $("debtCalculateButton").addEventListener("click",()=>{const balance=n("debtBalance"),rate=n("interestRate"),extra=n("debtExtra"),mode=$("debtMode")?.value||"payment";if(balance<=0)return show("debtResult",'<h2 class="warning">Enter your current debt</h2><p>We need the outstanding balance first.</p>');let payment=n("debtPayment");if(mode==="target")payment=annuityPayment(balance,rate,Math.max(1,n("debtTargetMonths")))+extra;const plan=debtPlan(balance,rate,payment);if(!plan)return show("debtResult",'<h2 class="bad">This payment does not reduce the debt</h2><p>Increase the payment above the monthly interest charge.</p>');const p25=debtPlan(balance,rate,payment+25),p50=debtPlan(balance,rate,payment+50),d=new Date();d.setMonth(d.getMonth()+plan.months);show("debtResult",`<div class="score-circle"><span>${Math.max(1,100-Math.floor(plan.months/12))}</span><small>plan</small></div><h2 class="good">Estimated payoff in ${plan.months} months</h2>${stat("Monthly payment",money(payment))}${stat("Total interest",money(plan.interest))}${stat("Total repaid",money(plan.total))}${stat("Estimated payoff",d.toLocaleDateString("en-GB",{month:"long",year:"numeric"}))}<div class="what-if-box"><strong>Extra-payment scenarios</strong>${stat("+£25/month",`${p25?.months||"—"} months · ${p25?money(p25.interest):"—"} interest`)}${stat("+£50/month",`${p50?.months||"—"} months · ${p50?money(p50.interest):"—"} interest`)}</div><p class="disclaimer">Simplified monthly-interest model. Actual lender calculations can differ.</p>`);});
+      $("debtCalculateButton").addEventListener("click",()=>{const balance=n("debtBalance"),rate=n("interestRate"),extra=n("debtExtra"),mode=$("debtMode")?.value||"payment";if(balance<=0)return show("debtResult",'<h2 class="warning">Enter your current debt</h2><p>We need the outstanding balance first.</p>');let payment=n("debtPayment");if(mode==="target")payment=annuityPayment(balance,aprToNominal(rate),Math.max(1,n("debtTargetMonths")))+extra;const plan=debtPlan(balance,rate,payment);if(!plan)return show("debtResult",'<h2 class="bad">This payment does not reduce the debt</h2><p>Increase the payment above the monthly interest charge.</p>');const p25=debtPlan(balance,rate,payment+25),p50=debtPlan(balance,rate,payment+50),d=new Date();d.setMonth(d.getMonth()+plan.months);const yrs=Math.floor(plan.months/12),mos=plan.months%12,dur=[yrs?`${yrs} year${yrs>1?"s":""}`:"",mos?`${mos} month${mos>1?"s":""}`:""].filter(Boolean).join(" ");show("debtResult",`<div class="result-message"><span class="mini-label">Estimated time to clear the debt</span><strong class="big-number">${dur}</strong></div><h2 class="good">Debt-free by ${d.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</h2>${stat("Monthly payment",money(payment))}${stat("Total interest",money(plan.interest))}${stat("Total repaid",money(plan.total))}${stat("Estimated payoff",d.toLocaleDateString("en-GB",{month:"long",year:"numeric"}))}<div class="what-if-box"><strong>Extra-payment scenarios</strong>${stat(`Pay ${money(payment+25)} a month`,`${p25?.months||"—"} months · ${p25?money(p25.interest):"—"} interest${p25?` · saves ${money(plan.interest-p25.interest)}`:""}`)}${stat(`Pay ${money(payment+50)} a month`,`${p50?.months||"—"} months · ${p50?money(p50.interest):"—"} interest${p50?` · saves ${money(plan.interest-p50.interest)}`:""}`)}</div><p class="disclaimer">Simplified model: interest is charged monthly at the rate equivalent to the APR entered, and no new spending is added. Actual lender calculations can differ.</p>`);});
       $("debtResetButton")?.addEventListener("click",()=>clear(["debtBalance","interestRate","debtPayment","debtExtra","debtTargetMonths"],"debtResult"));
     }
 
     if ($("mortgageCalculateButton")) {
-      $("mortgageCalculateButton").addEventListener("click",()=>{const price=n("mortgagePrice"),deposit=Math.min(price,n("mortgageDeposit")),amount=Math.max(0,price-deposit),rate=n("mortgageRate"),years=n("mortgageTerm"),over=n("mortgageOverpayment"),type=$("mortgageType")?.value||"repayment";if(price<=0||years<=0)return show("mortgageResult",'<h2 class="warning">Enter the property price and term</h2><p>Provide enough information to model the mortgage.</p>');const plan=mortgagePlan(amount,rate,years,over,type);if(!plan)return show("mortgageResult",'<h2 class="bad">Mortgage plan unavailable</h2><p>Check the amount, rate and term.</p>');const ltv=price?amount/price*100:0;const stamp=sdlt(price,{firstTime:$("mortgageFirstTime")?.value==="yes",additional:$("mortgageAdditional")?.value==="yes",replacing:$("mortgageReplacing")?.value==="yes"});show("mortgageResult",`<div class="result-message"><span class="mini-label">Estimated monthly payment</span><strong class="big-number">${money(plan.payment)}</strong></div>${stat("Property price",money(price))}${stat("Deposit",money(deposit))}${stat("Mortgage amount",money(amount))}${stat("LTV",`${ltv.toFixed(1)}%`)}${stat("Interest rate",`${rate.toFixed(2)}%`)}${stat("Mortgage type",type==="interest-only"?"Interest-only":"Repayment")}${stat("Total interest",money(plan.interest))}${stat("Total mortgage paid",money(plan.total))}${stat("Illustrative SDLT",money(stamp))}${over>0&&type==="repayment"?stat("Payment including overpayment",money(plan.payment)):""}<p class="disclaimer">Simplified mortgage estimate. Real products can include fees, fixed-rate periods, variable rates and early-repayment rules.</p>`);});
+      $("mortgageCalculateButton").addEventListener("click",()=>{const price=n("mortgagePrice"),deposit=Math.min(price,n("mortgageDeposit")),amount=Math.max(0,price-deposit),rate=n("mortgageRate"),years=n("mortgageTerm"),over=n("mortgageOverpayment"),type=$("mortgageType")?.value||"repayment";if(price<=0||years<=0)return show("mortgageResult",'<h2 class="warning">Enter the property price and term</h2><p>Provide enough information to model the mortgage.</p>');const plan=mortgagePlan(amount,rate,years,over,type);if(!plan)return show("mortgageResult",'<h2 class="bad">Mortgage plan unavailable</h2><p>Check the amount, rate and term.</p>');const ltv=price?amount/price*100:0;const stamp=sdlt(price,{firstTime:$("mortgageFirstTime")?.value==="yes",additional:$("mortgageAdditional")?.value==="yes",replacing:$("mortgageReplacing")?.value==="yes"});show("mortgageResult",`<div class="result-message"><span class="mini-label">Estimated monthly payment</span><strong class="big-number">${money(plan.payment)}</strong></div>${stat("Property price",money(price))}${stat("Deposit",money(deposit))}${stat("Mortgage amount",money(amount))}${stat("LTV",`${ltv.toFixed(1)}%`)}${stat("Interest rate",`${rate.toFixed(2)}%`)}${stat("Mortgage type",type==="interest-only"?"Interest-only":"Repayment")}${stat("Total interest",money(plan.interest))}${stat("Total mortgage paid",money(plan.total))}${stat("Illustrative Stamp Duty (England & NI)",money(stamp))}${(()=>{if(!(over>0&&type==="repayment"))return type==="interest-only"?`<div class="result-message warning"><p>With interest-only, the full ${money(amount)} is still owed at the end of the term and needs a separate repayment plan.</p></div>`:"";const base=mortgagePlan(amount,rate,years,0,"repayment");if(!base)return "";const saved=base.periods-plan.periods,sy=Math.floor(saved/12),sm=saved%12;return `<div class="what-if-box"><strong>Effect of overpaying ${money(over)} a month</strong>${stat("Payment without overpayment",money(base.payment))}${stat("Interest without overpayment",money(base.interest))}${stat("Interest with overpayment",money(plan.interest))}${stat("Interest saved",`<span class="good">${money(base.interest-plan.interest)}</span>`)}${stat("Mortgage cleared sooner by",`${sy?`${sy} yr `:""}${sm} mth`)}</div>`;})()}<p class="disclaimer">Simplified mortgage estimate. Real products can include fees, fixed-rate periods, variable rates and early-repayment rules.</p>`);});
       $("mortgageResetButton")?.addEventListener("click",()=>clear(["mortgagePrice","mortgageDeposit","mortgageRate","mortgageTerm","mortgageOverpayment"],"mortgageResult"));
     }
 
@@ -458,7 +466,7 @@
     }
 
     if ($("loanCalculateButton")) {
-      $("loanCalculateButton").addEventListener("click",()=>{const amount=n("loanAmount"),rate=n("loanRate"),years=n("loanTerm"),fee=n("loanFee"),extra=n("loanExtra");if(amount<=0||years<=0)return show("loanResult",'<h2 class="warning">Enter the loan amount and term</h2><p>Use positive values for the borrowing amount and duration.</p>');const plan=amortise(amount+fee,rate,years*12,extra);if(!plan)return show("loanResult",'<h2 class="bad">This loan plan does not amortise</h2><p>Check the APR and payment assumptions.</p>');const p50=amortise(amount+fee,rate,years*12,extra+50);show("loanResult",`<div class="result-message"><span class="mini-label">Estimated monthly payment</span><strong class="big-number">${money(plan.payment)}</strong></div>${stat("Loan amount",money(amount))}${stat("Fee added to borrowing",money(fee))}${stat("APR",`${rate.toFixed(2)}%`)}${stat("Total interest",money(plan.interest))}${stat("Total repaid",money(plan.total))}<div class="what-if-box"><strong>£50 extra each month</strong>${stat("Estimated payoff",p50?`${p50.periods} months`:"—")}${stat("Estimated interest",p50?money(p50.interest):"—")}</div><p class="disclaimer">Simplified amortisation estimate. Lender terms, fees and early repayment rules may differ.</p>`);});
+      $("loanCalculateButton").addEventListener("click",()=>{const amount=n("loanAmount"),rate=n("loanRate"),years=n("loanTerm"),fee=n("loanFee"),extra=n("loanExtra");if(amount<=0||years<=0)return show("loanResult",'<h2 class="warning">Enter the loan amount and term</h2><p>Use positive values for the borrowing amount and duration.</p>');const plan=amortise(amount+fee,aprToNominal(rate),years*12,extra);if(!plan)return show("loanResult",'<h2 class="bad">This loan plan does not amortise</h2><p>Check the APR and payment assumptions.</p>');const p50=amortise(amount+fee,aprToNominal(rate),years*12,extra+50);show("loanResult",`<div class="result-message"><span class="mini-label">Estimated monthly payment</span><strong class="big-number">${money(plan.payment)}</strong></div>${stat("Loan amount",money(amount))}${stat("Fee added to borrowing",money(fee))}${stat("APR",`${rate.toFixed(2)}%`)}${stat("Total interest",money(plan.interest))}${stat("Total repaid",money(plan.total))}<div class="what-if-box"><strong>£50 extra each month</strong>${stat("Estimated payoff",p50?`${p50.periods} months (instead of ${plan.periods})`:"—")}${stat("Estimated interest",p50?`${money(p50.interest)} (saves ${money(plan.interest-p50.interest)})`:"—")}</div><p class="disclaimer">Simplified amortisation estimate. Lender terms, fees and early repayment rules may differ.</p>`);});
       $("loanResetButton")?.addEventListener("click",()=>clear(["loanAmount","loanRate","loanTerm","loanFee","loanExtra"],"loanResult"));
     }
   }
@@ -468,5 +476,5 @@
     else render();
   }
 
-  return { clamp, money, annuityPayment, amortise, debtPlan, futureValue, monthlyFutureValue, requiredMonthlySaving, mortgagePlan, sdlt, personalAllowance, incomeTax, employeeNI, loanRepayment, takeHome, affordabilityPlan };
+  return { clamp, money, aprMonthly, aprToNominal, annuityPayment, amortise, debtPlan, futureValue, monthlyFutureValue, requiredMonthlySaving, mortgagePlan, sdlt, personalAllowance, incomeTax, employeeNI, loanRepayment, takeHome, affordabilityPlan };
 });

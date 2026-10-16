@@ -8,7 +8,9 @@ const debt = W.debtPlan(5000, 20, 200);
 assert.ok(debt);
 assert.ok(debt.months > 0);
 assert.ok(debt.interest > 0);
-assert.equal(W.debtPlan(5000, 20, 83.3333333333), null);
+// A 20% APR is ~1.5309% a month, so £76.55 only covers the interest.
+assert.equal(W.debtPlan(5000, 20, 5000 * W.aprMonthly(20)), null);
+assert.ok(W.debtPlan(5000, 20, 83.34));
 
 assert.equal(W.sdlt(300000), 5000);
 assert.equal(W.sdlt(500000, { firstTime: true }), 10000);

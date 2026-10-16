@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - worthchex-v2-audit
-      - worthchex-top-calculators
   pull_request:
     branches:
       - main
@@ -25,15 +23,12 @@ jobs:
           node --check calculator-suite-final.js
           node --check financial-suite-v4.js
           node --check reset-fixes.js
-          node --check script.js
-          node --check advanced-calculators.js
+          node --check site.js
       - name: Run whole-site HTML, link and asset audit
         run: node tests/site-audit.test.js
-      - name: Run legacy calculator regression tests
-        run: node tests/calculations.test.js
-      - name: Run advanced calculator regression tests
-        run: node tests/advanced-calculators.test.js
-      - name: Run unified calculator suite tests
+      - name: Run known-answer accuracy tests
+        run: node tests/accuracy.test.js
+      - name: Run calculator suite tests
         run: node tests/calculator-suite.test.js
       - name: Run new calculator regression tests
         run: node tests/new-tools-regression.test.js
@@ -41,5 +36,3 @@ jobs:
         run: node tests/reset-fixes.test.js
       - name: Run salary period-switch regression test
         run: node tests/salary-period-switch.test.js
-      - name: Run production script smoke tests
-        run: node tests/script-smoke.test.js

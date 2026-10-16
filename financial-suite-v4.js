@@ -1,5 +1,5 @@
-/* WorthChex Financial Calculator Suite V4
-   2026/27 UK tax, SDLT, VAT, compound growth and car finance models.
+/* WorthChex financial calculator engine
+   2026/27 UK tax, property tax (SDLT, LBTT, LTT), VAT, compound growth and car finance models.
    Browser-first; no external dependencies. */
 (function (root, factory) {
   const api = factory();
@@ -10,7 +10,12 @@
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const num = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
-  const money = (value, digits = 2) => `£${Math.max(0, num(value)).toLocaleString('en-GB', {minimumFractionDigits: digits, maximumFractionDigits: digits})}`;
+  const money = (value, digits = 2) => {
+    const v = num(value), sign = v < 0 ? '-' : '';
+    return `${sign}£${Math.abs(v).toLocaleString('en-GB', {minimumFractionDigits: digits, maximumFractionDigits: digits})}`;
+  };
+  // UK APRs are annual effective rates; convert to the equivalent monthly rate.
+  const aprToMonthly = (apr) => Math.max(0, num(apr)) === 0 ? 0 : Math.pow(1 + Math.max(0, num(apr)) / 100, 1 / 12) - 1;
   const pct = (value, digits = 2) => `${num(value).toLocaleString('en-GB', {minimumFractionDigits: digits, maximumFractionDigits: digits})}%`;
 
   function personalAllowance(adjustedNetIncome) {
@@ -52,30 +57,84 @@
     return plan ? Math.max(0,gross-plan.threshold)*plan.rate : 0;
   }
 
+  // Pension methods:
+  //  none             - no employee pension deduction
+  //  salary-sacrifice - pay is reduced before Income Tax, NI and student loan
+  //  net-pay          - contribution taken before Income Tax (NI still due)
+  //  relief-at-source - 80% of the gross contribution is taken from net pay;
+  //                     the provider claims 20% basic-rate relief from HMRC
   function takeHomePay(gross, options={}) {
-    const salary=Math.max(0,gross), region=options.region==='scotland'?'scotland':'rUK', niCategory=options.niCategory||'A';
-    const pensionPercent=clamp(num(options.pensionPercent),0,40)/100, pensionMethod=options.pensionMethod||'none';
-    const salarySacrifice=pensionMethod==='salary-sacrifice'?salary*pensionPercent:0;
-    const netPayPension=pensionMethod==='net-pay'?salary*pensionPercent:0;
-    const pensionOut=salary*pensionPercent;
-    const adjustedNetIncome=Math.max(0,salary-salarySacrifice-netPayPension);
-    const allowance=personalAllowance(adjustedNetIncome), taxableIncome=Math.max(0,adjustedNetIncome-allowance);
-    const tax=incomeTax(taxableIncome,region), ni=employeeNI(Math.max(0,salary-salarySacrifice),niCategory);
-    const student=studentLoan(salary,options.studentPlan||'none'), postgrad=options.postgraduate?studentLoan(salary,'postgraduate'):0;
+    const salary=Math.max(0,num(gross)), region=options.region==='scotland'?'scotland':'rUK', niCategory=options.niCategory||'A';
+    const pensionMethod=['salary-sacrifice','net-pay','relief-at-source'].includes(options.pensionMethod)?options.pensionMethod:'none';
+    const pensionPercent=pensionMethod==='none'?0:clamp(num(options.pensionPercent),0,40)/100;
+    const pensionGross=salary*pensionPercent;
+    const salarySacrifice=pensionMethod==='salary-sacrifice'?pensionGross:0;
+    const netPayPension=pensionMethod==='net-pay'?pensionGross:0;
+    const reliefAtSource=pensionMethod==='relief-at-source'?pensionGross*0.8:0;
+    const pensionOut=salarySacrifice+netPayPension+reliefAtSource;
+    const payAfterSacrifice=Math.max(0,salary-salarySacrifice);
+    const adjustedNetIncome=Math.max(0,payAfterSacrifice-netPayPension-(pensionMethod==='relief-at-source'?pensionGross:0));
+    const allowance=personalAllowance(adjustedNetIncome);
+    const taxableIncome=Math.max(0,payAfterSacrifice-netPayPension-allowance);
+    const tax=incomeTax(taxableIncome,region), ni=employeeNI(payAfterSacrifice,niCategory);
+    const student=studentLoan(payAfterSacrifice,options.studentPlan||'none'), postgrad=options.postgraduate?studentLoan(payAfterSacrifice,'postgraduate'):0;
     const net=Math.max(0,salary-tax-ni-pensionOut-student-postgrad);
-    return {salary,tax,ni,pension:pensionOut,salarySacrifice,student,postgrad,net,allowance,taxableIncome,monthly:net/12,fourWeekly:net/13,weekly:net/52,daily:net/260,hourly:net/1950};
+    return {salary,tax,ni,pension:pensionOut,pensionGross,pensionMethod,salarySacrifice,student,postgrad,net,allowance,taxableIncome,monthly:net/12,fourWeekly:net/13,weekly:net/52,daily:net/260,hourly:net/1950};
   }
 
-  function sdlt(price, options={}) {
-    const amount=Math.max(0,price); if(amount<=0)return{tax:0,effectiveRate:0,bands:[]};
-    const firstTime=!!options.firstTime, additional=!!options.additional, replacing=!!options.replacing, nonResident=!!options.nonResident;
-    const surcharge=(additional&&!replacing?0.05:0)+(nonResident?0.02:0);
-    let bands;
-    if(firstTime&&amount<=500000) bands=[[0,300000,0],[300000,500000,0.05]];
-    else bands=[[0,125000,0],[125000,250000,0.02],[250000,925000,0.05],[925000,1500000,0.10],[1500000,Infinity,0.12]];
+  function banded(amount, bands, surchargeRate) {
     let tax=0; const breakdown=[];
-    for(const [low,high,rate] of bands){if(amount<=low)continue;const slice=Math.max(0,Math.min(amount,high)-low);if(!slice)continue;const actualRate=rate+surcharge,charge=slice*actualRate;tax+=charge;breakdown.push({low,high,slice,rate:actualRate,charge});}
-    return {tax,effectiveRate:amount?tax/amount:0,surcharge,firstTimeQualifies:firstTime&&amount<=500000,breakdown};
+    for(const [low,high,rate] of bands){
+      if(amount<=low)continue;
+      const slice=Math.max(0,Math.min(amount,high)-low); if(!slice)continue;
+      const actualRate=rate+surchargeRate, charge=slice*actualRate; tax+=charge;
+      breakdown.push({low,high,slice,rate:actualRate,charge});
+    }
+    return {tax,breakdown};
+  }
+
+  // England & Northern Ireland: Stamp Duty Land Tax (rates from 1 April 2025).
+  const SDLT_BANDS=[[0,125000,0],[125000,250000,0.02],[250000,925000,0.05],[925000,1500000,0.10],[1500000,Infinity,0.12]];
+  const SDLT_FTB_BANDS=[[0,300000,0],[300000,500000,0.05]];
+  function sdlt(price, options={}) {
+    const amount=Math.max(0,num(price)); if(amount<=0)return{tax:0,effectiveRate:0,surcharge:0,firstTimeQualifies:false,breakdown:[]};
+    const additional=!!options.additional&&!options.replacing, nonResident=!!options.nonResident;
+    // First-time buyer relief cannot apply to an additional-property purchase.
+    const firstTimeQualifies=!!options.firstTime&&!additional&&amount<=500000;
+    // The higher-rates surcharge does not apply to purchases under £40,000.
+    const surcharge=(additional&&amount>=40000?0.05:0)+(nonResident?0.02:0);
+    const {tax,breakdown}=banded(amount,firstTimeQualifies?SDLT_FTB_BANDS:SDLT_BANDS,surcharge);
+    return {tax,effectiveRate:tax/amount,surcharge,firstTimeQualifies,breakdown,region:'england'};
+  }
+
+  // Scotland: Land and Buildings Transaction Tax plus Additional Dwelling Supplement.
+  const LBTT_BANDS=[[0,145000,0],[145000,250000,0.02],[250000,325000,0.05],[325000,750000,0.10],[750000,Infinity,0.12]];
+  const LBTT_FTB_BANDS=[[0,175000,0],[175000,250000,0.02],[250000,325000,0.05],[325000,750000,0.10],[750000,Infinity,0.12]];
+  const ADS_RATE=0.08;
+  function lbtt(price, options={}) {
+    const amount=Math.max(0,num(price)); if(amount<=0)return{tax:0,effectiveRate:0,ads:0,firstTimeQualifies:false,breakdown:[]};
+    const additional=!!options.additional&&!options.replacing;
+    const firstTimeQualifies=!!options.firstTime&&!additional;
+    const {tax:main,breakdown}=banded(amount,firstTimeQualifies?LBTT_FTB_BANDS:LBTT_BANDS,0);
+    const ads=additional&&amount>=40000?amount*ADS_RATE:0;
+    const tax=main+ads;
+    return {tax,main,ads,effectiveRate:tax/amount,firstTimeQualifies,breakdown,region:'scotland'};
+  }
+
+  // Wales: Land Transaction Tax (main and higher residential rates).
+  const LTT_BANDS=[[0,225000,0],[225000,400000,0.06],[400000,750000,0.075],[750000,1500000,0.10],[1500000,Infinity,0.12]];
+  const LTT_HIGHER_BANDS=[[0,180000,0.05],[180000,250000,0.085],[250000,400000,0.10],[400000,750000,0.125],[750000,1500000,0.15],[1500000,Infinity,0.17]];
+  function ltt(price, options={}) {
+    const amount=Math.max(0,num(price)); if(amount<=0)return{tax:0,effectiveRate:0,higherRates:false,breakdown:[]};
+    const higherRates=!!options.additional&&!options.replacing&&amount>=40000;
+    const {tax,breakdown}=banded(amount,higherRates?LTT_HIGHER_BANDS:LTT_BANDS,0);
+    return {tax,effectiveRate:tax/amount,higherRates,breakdown,region:'wales'};
+  }
+
+  function propertyTax(price, options={}) {
+    if(options.region==='scotland')return lbtt(price,options);
+    if(options.region==='wales')return ltt(price,options);
+    return sdlt(price,options);
   }
 
   function vatFromNet(net,rate){const amount=Math.max(0,net),r=Math.max(0,rate)/100,vat=amount*r;return{net:amount,vat,gross:amount+vat};}
@@ -121,7 +180,7 @@
   }
 
   function loanPayment(principal,annualRate,months,balloon=0){
-    const amount=Math.max(0,principal),term=Math.max(1,Math.round(months)),r=Math.max(0,annualRate)/100/12,finalBalloon=clamp(Math.max(0,balloon),0,amount);
+    const amount=Math.max(0,principal),term=Math.max(1,Math.round(months)),r=aprToMonthly(annualRate),finalBalloon=clamp(Math.max(0,balloon),0,amount);
     if(r===0)return Math.max(0,(amount-finalBalloon)/term); const discount=Math.pow(1+r,-term),pvBalloon=finalBalloon*discount;
     return Math.max(0,(amount-pvBalloon)*r/(1-discount));
   }
@@ -132,5 +191,5 @@
     return{vehiclePrice,deposit,partExchange,fees,financed,months,apr,balloon,payment,scheduledPayments,totalFinanceCost,totalPaid,financeInterest,cashPrice,financeExtraCost:Math.max(0,totalPaid-cashPrice)};
   }
 
-  return {clamp,money,pct,personalAllowance,incomeTax,employeeNI,studentLoan,takeHomePay,sdlt,vatFromNet,vatFromGross,compoundGrowth,carFinance};
+  return {clamp,money,pct,aprToMonthly,personalAllowance,incomeTax,employeeNI,studentLoan,takeHomePay,sdlt,lbtt,ltt,propertyTax,vatFromNet,vatFromGross,compoundGrowth,loanPayment,carFinance};
 });

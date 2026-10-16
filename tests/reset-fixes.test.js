@@ -17,11 +17,16 @@ function makeControl(type, value, checked = false, tagName = "INPUT") {
 
   if (tagName === "SELECT") {
     let index = 0;
+    control.options = [
+      { value: "rUK", defaultSelected: false },
+      { value: "england", defaultSelected: true },
+      { value: "scotland", defaultSelected: false }
+    ];
     Object.defineProperty(control, "selectedIndex", {
       get() { return index; },
       set(next) {
         index = next;
-        if (next === -1) control.value = "";
+        control.value = next >= 0 ? control.options[next].value : "";
       }
     });
   }
@@ -95,7 +100,7 @@ assert.equal(resetButton.listeners.click.capture, true, "reset handler must run 
 
 input.value = "99999";
 select.value = "scotland";
-select.selectedIndex = 1;
+select.selectedIndex = 2;
 checkbox.checked = false;
 date.value = "2030-01-01";
 result.innerHTML = "<p>new result</p>";
@@ -106,12 +111,12 @@ resetButton.click();
 assert.equal(resetButton.lastEvent.prevented, true, "reset should prevent the native click action");
 assert.equal(resetButton.lastEvent.stopped, true, "reset should stop older reset handlers");
 assert.equal(input.value, "", "number field should be blank after reset");
-assert.equal(select.value, "", "select should be blank after reset");
-assert.equal(select.selectedIndex, -1, "select should have no selected option after reset");
+assert.equal(select.selectedIndex, 1, "select should return to its default option after reset");
+assert.equal(select.value, "england", "select should hold its default value after reset");
 assert.equal(checkbox.checked, false, "checkbox should be unchecked after reset");
 assert.equal(date.value, "", "date field should be blank after reset");
 assert.equal(result.innerHTML, "", "result HTML should be cleared");
 assert.equal(result.classList.contains("hidden"), true, "result should be hidden after reset");
 assert.ok(select.dispatchCount > 0, "conditional UI should be refreshed");
 
-console.log("WorthChex blank-reset regression test passed.");
+console.log("WorthChex reset regression test passed.");
