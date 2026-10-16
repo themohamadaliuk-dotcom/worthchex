@@ -127,6 +127,8 @@ def process(path):
     s = re.sub(r'\s*<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*>\s*</script>', "", s)
     if 'name="theme-color"' not in s:
         s = s.replace('<link rel="canonical"', '<meta name="theme-color" content="#635bff"><link rel="canonical"', 1)
+    if 'rel="icon"' not in s:
+        s = s.replace('<link rel="canonical"', '<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="canonical"', 1)
     if 'rel="manifest"' not in s:
         s = s.replace('<link rel="canonical"', '<link rel="manifest" href="/site.webmanifest"><link rel="canonical"', 1)
     s = re.sub(r'href="(?:\.\./)+favicon\.svg"', 'href="/favicon.svg"', s)
