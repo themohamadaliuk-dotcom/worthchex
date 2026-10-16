@@ -214,5 +214,39 @@ function studentLoanGuide() {
   });
 }
 
-const made = [...SALARIES.map(salaryGuide), lbttGuide(), lttGuide(), secondHomeGuide(), studentLoanGuide()];
+// ---------------------------------------------------------------- salary after tax hub
+function salaryHub() {
+  const list = [15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 70000, 80000, 90000, 100000, 110000, 125000, 150000];
+  const rows = list.map(s => {
+    const r = F.takeHomePay(s), sc = F.takeHomePay(s, { region: "scotland" });
+    const label = SALARIES.includes(s) ? `<a href="/money-guides/${salarySlug(s)}/">${comma(s)}</a>` : comma(s);
+    return [label, m0(r.tax + r.ni), m0(r.net), m0(r.monthly), m0(r.weekly), m0(sc.monthly)];
+  });
+  return page({
+    slug: "salary-after-tax",
+    title: `Salary After Tax UK ${YEAR}: Take-Home Pay Table £15k to £150k | WorthChex`,
+    description: `UK salary after tax table for ${YEAR}: yearly, monthly and weekly take-home pay from £15,000 to £150,000, with Scotland figures, tax bands and how it is worked out.`,
+    eyebrow: "PAY GUIDE",
+    h1: `Salary after tax: UK take-home pay table for ${YEAR}`,
+    lead: `Find your salary below to see what you take home each year, month and week after Income Tax and National Insurance. Figures are for the ${YEAR} tax year with a standard tax code and no pension or student loan.`,
+    body:
+      section(`<span class="step">TAKE-HOME PAY TABLE</span><h2>How much you take home at each salary.</h2>${table(["Salary", "Tax + NI a year", "Take-home a year", "A month", "A week", "A month in Scotland"], rows)}
+<p class="source-note">England, Wales and Northern Ireland unless stated. Assumes tax code 1257L, National Insurance category A, and no pension, student loan or benefits in kind. Click a highlighted salary for a full breakdown.</p>
+<div class="content-callout"><strong>Your exact take-home pay</strong><p>Add your pension, student loan and region in the <a href="/take-home-pay-calculator/">take-home pay calculator</a>.</p></div>`) +
+      section(`<span class="step">THE RATES</span><h2>${YEAR} Income Tax and National Insurance rates.</h2><h3>Income Tax (England, Wales and Northern Ireland)</h3>${table(["Band", "Taxable income", "Rate"], [["Personal Allowance", "Up to £12,570", "0%"], ["Basic rate", "£12,571 to £50,270", "20%"], ["Higher rate", "£50,271 to £125,140", "40%"], ["Additional rate", "Over £125,140", "45%"]])}
+<p>The Personal Allowance shrinks by £1 for every £2 of income over £100,000, so it is gone completely at £125,140.</p>
+<h3>Income Tax in Scotland</h3>${table(["Band", "Income", "Rate"], [["Starter", "£12,571 to £16,537", "19%"], ["Basic", "£16,538 to £29,526", "20%"], ["Intermediate", "£29,527 to £43,662", "21%"], ["Higher", "£43,663 to £75,000", "42%"], ["Advanced", "£75,001 to £125,140", "45%"], ["Top", "Over £125,140", "48%"]])}
+<h3>Employee National Insurance (category A)</h3>${table(["Earnings", "Rate"], [["Up to £12,570 a year", "0%"], ["£12,570 to £50,270", "8%"], ["Over £50,270", "2%"]])}`, true) +
+      section(`<span class="step">HOW IT WORKS</span><h2>How take-home pay is worked out.</h2><ol class="guide-steps"><li>Take off the tax-free Personal Allowance (£12,570 for most people).</li><li>Tax the rest in slices: 20% on the first £37,700 of taxable income, then 40%, then 45%. Only the slice in each band is taxed at that rate.</li><li>Work out National Insurance separately: 8% between £12,570 and £50,270, then 2% above.</li><li>Take off any pension contribution and student loan repayment.</li><li>What is left is your take-home pay.</li></ol>
+<div class="example-box"><strong>Example, £40,000:</strong> £27,430 is taxable, so Income Tax is £5,486. National Insurance is 8% of £27,430 = £2,194. Take-home pay is £32,320 a year, or £2,693 a month.</div>`) +
+      section(`<span class="step">FREQUENT QUESTIONS</span><h2>Salary after tax FAQs</h2>${faq([
+        ["Why is my take-home pay lower than this table?", "The table has no pension or student loan. A 5% workplace pension and a student loan can each reduce monthly pay by £100 or more. Your tax code, benefits in kind or other payroll deductions can also make a difference."],
+        ["Does a pay rise ever reduce take-home pay?", "No. Tax is charged in bands, so moving into a higher band only affects the money above the threshold. Every pay rise increases take-home pay, although between £100,000 and £125,140 you keep only about 38p of each extra pound."],
+        ["Is take-home pay different in Scotland?", "Yes. Scotland has six Income Tax bands. People earning under about £30,000 pay slightly less than elsewhere in the UK, and people earning more pay more. National Insurance is the same across the UK."],
+        ["How do I work out my hourly rate?", "Divide your annual salary by the number of hours you work in a year. For a 37.5-hour week that is 1,950 hours, so £30,000 is about £15.38 an hour before tax."],
+      ])}<p>Detailed guides: ${SALARIES.map(x => `<a href="/money-guides/${salarySlug(x)}/">${k(x)} after tax</a>`).join(" · ")} · <a href="/money-guides/student-loan-repayments/">Student loan repayments</a></p><p class="source-note">Sources: <a href="https://www.gov.uk/income-tax-rates" target="_blank" rel="noopener noreferrer">GOV.UK Income Tax rates</a> · <a href="https://www.gov.uk/scottish-income-tax" target="_blank" rel="noopener noreferrer">Scottish Income Tax</a> · <a href="https://www.gov.uk/national-insurance/how-much-you-pay" target="_blank" rel="noopener noreferrer">GOV.UK National Insurance</a>. Estimates for planning only, not tax advice.</p>`, true),
+  });
+}
+
+const made = [salaryHub(), ...SALARIES.map(salaryGuide), lbttGuide(), lttGuide(), secondHomeGuide(), studentLoanGuide()];
 console.log("Built guides:", made.join(", "));
