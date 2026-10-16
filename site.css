@@ -34,12 +34,14 @@ body {
 }
 .skip-link:focus { top: 12px; }
 
-/* ---------- Logo ---------- */
-.wc-logo { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; color: var(--wc-ink); font-size: 23px; font-weight: 800; letter-spacing: -.7px; line-height: 1; text-decoration: none; }
-.wc-logo .logo-mark { width: 38px; height: 32px; flex: 0 0 38px; }
-.wc-logo .logo-accent { background: linear-gradient(90deg, #7c3aed, #2563eb); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.site-footer .wc-logo { color: #fff; }
-@media (max-width: 420px) { .wc-logo { font-size: 21px; } .wc-logo .logo-mark { width: 34px; height: 28px; flex-basis: 34px; } }
+/* ---------- Logo (identical on every page) ---------- */
+.wc-logo { display: inline-flex !important; align-items: center; gap: 9px; flex: 0 0 auto; margin: 0 !important; padding: 0 !important; color: var(--wc-ink) !important; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important; font-size: 24px !important; font-weight: 800 !important; letter-spacing: -.8px; line-height: 1 !important; text-decoration: none !important; background: none !important; }
+.wc-logo .logo-mark { display: block; width: 40px !important; height: 40px !important; flex: 0 0 40px; }
+.wc-logo .logo-word { white-space: nowrap; }
+.wc-logo .logo-accent { color: #5b4cf5; }
+.site-footer .wc-logo { color: #fff !important; }
+.site-footer .wc-logo .logo-accent { color: #a5b4fc; }
+@media (max-width: 420px) { .wc-logo { font-size: 22px !important; gap: 8px; } .wc-logo .logo-mark { width: 36px !important; height: 36px !important; flex-basis: 36px; } }
 
 /* ---------- Header ---------- */
 .navbar { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,.96); }

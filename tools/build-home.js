@@ -157,7 +157,7 @@ ${faqs.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></detai
 </section>
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) })}</script>
 </main>
-<script src="/financial-suite-v4.js?v=20261016b"></script>
+<script src="/financial-suite-v4.js?v=20261016c"></script>
 <script>
 (function () {
   var F = window.WorthChexFinancial; if (!F) return;
