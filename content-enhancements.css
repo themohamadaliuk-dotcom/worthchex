@@ -78,3 +78,9 @@
 .guide-steps li { margin-bottom: 8px; }
 .about-inner .breadcrumbs { margin-bottom: 14px; }
 @media (max-width: 760px) { .guide-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .guide-stat strong { font-size: 22px; } }
+
+/* Contact page */
+.contact-email { margin: 6px 0 10px; font-size: clamp(20px, 4vw, 26px); font-weight: 800; word-break: break-word; }
+.contact-email a { color: var(--wc-brand, #635bff); text-decoration: none; }
+.contact-email a:hover { text-decoration: underline; }
+.related-links { margin-top: 18px; line-height: 1.9; }
