@@ -49,14 +49,21 @@ CALCS = [
 CALC_ICON = {href: ic for href, _, ic in CALCS}
 CALC_ICON["/calculators/"] = "all"
 
+def logo_mark(gid, dark=False):
+    a, b = ("#8b5cf6", "#60a5fa") if dark else ("#6d28d9", "#2563eb")
+    side = "#5b50d6" if dark else "#3b2fa8"
+    ring = "#121522" if dark else "#fff"
+    coin = lambda cy, op: (f'<g opacity="{op}"><path d="M5 {cy}v5a15 5.5 0 0 0 30 0v-5z" fill="{side}"/>'
+                           f'<ellipse cx="20" cy="{cy}" rx="15" ry="5.5" fill="url(#{gid})"/></g>')
+    return (f'<svg class="logo-mark" viewBox="0 0 44 44" aria-hidden="true" focusable="false">'
+            f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient></defs>'
+            + coin(32, .55) + coin(25.5, .8) + coin(19, 1) +
+            '<text x="20" y="22.6" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="10" fill="#fff">£</text>'
+            f'<circle cx="34" cy="10" r="8.5" fill="#fff" stroke="{ring}" stroke-width="1.5"/><circle cx="34" cy="10" r="7" fill="#10b981"/>'
+            '<path d="M30.6 10.2l2.4 2.4 4.4-4.8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+
 def logo(gid, dark=False):
-    a, b = ("#a78bfa", "#60a5fa") if dark else ("#7c3aed", "#2563eb")
-    mark = (f'<svg class="logo-mark" viewBox="0 0 48 40" aria-hidden="true" focusable="false"><defs><linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="1">'
-            f'<stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient></defs>'
-            f'<path d="M4 7 13.5 34 24 17.5 34.5 34 44 7" fill="none" stroke="url(#{gid})" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>'
-            f'<text x="24" y="15" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="18" fill="url(#{gid})">£</text></svg>')
-    word = 'WorthChex' if dark else 'Worth<span class="logo-accent">Chex</span>'
-    return f'<a href="/" class="wc-logo" aria-label="WorthChex home">{mark}<span class="logo-word">{word}</span></a>'
+    return f'<a href="/" class="wc-logo" aria-label="WorthChex home">{logo_mark(gid, dark)}<span class="logo-word">Worth<span class="logo-accent">Chex</span></span></a>'
 
 def link(href, label, ic=None):
     return f'<a href="{href}">{icon(ic) if ic else ""}{label}</a>'
@@ -155,7 +162,7 @@ def process(path):
     head = [
         '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">',
-        "".join(f'<link rel="stylesheet" href="{h}?v=20261016b">' for h in sheets),
+        "".join(f'<link rel="stylesheet" href="{h}?v=20261016c">' for h in sheets),
         f'<meta property="og:type" content="{"article" if is_guide else "website"}"><meta property="og:site_name" content="WorthChex"><meta property="og:locale" content="en_GB">',
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{canonical}">',
         f'<meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WorthChex: free UK money calculators">',
@@ -210,7 +217,7 @@ def process(path):
 
     # ---- site script
     s = re.sub(r'\s*<script src="/site\.js[^"]*"[^>]*></script>', "", s)
-    s = s.replace("</body>", '<script src="/site.js?v=20261016b" defer></script>\n</body>', 1)
+    s = s.replace("</body>", '<script src="/site.js?v=20261016c" defer></script>\n</body>', 1)
 
     # ---- tool card icons
     def swap_icon(m):
