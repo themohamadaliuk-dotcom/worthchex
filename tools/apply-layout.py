@@ -49,6 +49,15 @@ CALCS = [
 CALC_ICON = {href: ic for href, _, ic in CALCS}
 CALC_ICON["/calculators/"] = "all"
 
+def logo(gid, dark=False):
+    a, b = ("#a78bfa", "#60a5fa") if dark else ("#7c3aed", "#2563eb")
+    mark = (f'<svg class="logo-mark" viewBox="0 0 48 40" aria-hidden="true" focusable="false"><defs><linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="1">'
+            f'<stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient></defs>'
+            f'<path d="M4 7 13.5 34 24 17.5 34.5 34 44 7" fill="none" stroke="url(#{gid})" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<text x="24" y="15" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="18" fill="url(#{gid})">£</text></svg>')
+    word = 'WorthChex' if dark else 'Worth<span class="logo-accent">Chex</span>'
+    return f'<a href="/" class="wc-logo" aria-label="WorthChex home">{mark}<span class="logo-word">{word}</span></a>'
+
 def link(href, label, ic=None):
     return f'<a href="{href}">{icon(ic) if ic else ""}{label}</a>'
 
@@ -56,7 +65,7 @@ NAV = (
     '<!-- wc:header -->'
     '<a class="skip-link" href="#main">Skip to content</a>'
     '<nav class="navbar" aria-label="Main navigation"><div class="nav-inner">'
-    '<a href="/" class="logo" aria-label="WorthChex home"><span class="logo-icon">£</span>WorthChex</a>'
+    + logo("wcg-h") +
     '<div class="nav-links">'
     '<a href="/take-home-pay-calculator/">Take-home pay</a>'
     '<a href="/mortgage-calculator/">Mortgage</a>'
@@ -84,7 +93,7 @@ def flist(items):
 FOOTER = (
     '<!-- wc:footer -->'
     '<footer class="site-footer"><div class="footer-grid">'
-    '<div class="footer-brand"><a href="/" class="logo" aria-label="WorthChex home"><span class="logo-icon">£</span>WorthChex</a>'
+    '<div class="footer-brand">' + logo("wcg-f", dark=True) +
     '<p>Free UK money calculators and plain-English guides. Every calculation runs in your browser: no sign-up, no bank details.</p></div>'
     '<div><h2>Pay &amp; tax</h2>' + flist([("/take-home-pay-calculator/", "Take-home pay"), ("/salary-calculator/", "Salary & pay rise"), ("/vat-calculator/", "VAT")]) + '</div>'
     '<div><h2>Home &amp; borrowing</h2>' + flist([("/mortgage-calculator/", "Mortgage"), ("/stamp-duty-calculator/", "Stamp Duty"), ("/affordability-calculator/", "Affordability"), ("/car-finance-calculator/", "Car finance"), ("/personal-loan-calculator/", "Personal loan"), ("/debt-payoff-calculator/", "Debt payoff")]) + '</div>'
@@ -146,7 +155,7 @@ def process(path):
     head = [
         '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">',
-        "".join(f'<link rel="stylesheet" href="{h}?v=20261016">' for h in sheets),
+        "".join(f'<link rel="stylesheet" href="{h}?v=20261016b">' for h in sheets),
         f'<meta property="og:type" content="{"article" if is_guide else "website"}"><meta property="og:site_name" content="WorthChex"><meta property="og:locale" content="en_GB">',
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{canonical}">',
         f'<meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WorthChex: free UK money calculators">',
@@ -201,7 +210,7 @@ def process(path):
 
     # ---- site script
     s = re.sub(r'\s*<script src="/site\.js[^"]*"[^>]*></script>', "", s)
-    s = s.replace("</body>", '<script src="/site.js?v=20261016" defer></script>\n</body>', 1)
+    s = s.replace("</body>", '<script src="/site.js?v=20261016b" defer></script>\n</body>', 1)
 
     # ---- tool card icons
     def swap_icon(m):
