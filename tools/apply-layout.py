@@ -165,8 +165,8 @@ def process(path):
         "".join(f'<link rel="stylesheet" href="{h}?v=20261016c">' for h in sheets),
         f'<meta property="og:type" content="{"article" if is_guide else "website"}"><meta property="og:site_name" content="WorthChex"><meta property="og:locale" content="en_GB">',
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{canonical}">',
-        f'<meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WorthChex: free UK money calculators">',
-        f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{SITE}/og-image.png">',
+        f'<meta property="og:image" content="{SITE}/og-image.png?v=2"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WorthChex: free UK money calculators">',
+        f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{SITE}/og-image.png?v=2">',
         ADSENSE,
     ]
     # structured data
@@ -185,7 +185,7 @@ def process(path):
                       "publisher": {"@type": "Organization", "name": "WorthChex", "url": SITE + "/"}})
     if is_guide:
         graph.append({"@type": "Article", "headline": h1[:110], "description": desc, "url": canonical, "mainEntityOfPage": canonical,
-                      "inLanguage": "en-GB", "dateModified": MODIFIED, "image": SITE + "/og-image.png",
+                      "inLanguage": "en-GB", "dateModified": MODIFIED, "image": SITE + "/og-image.png?v=2",
                       "author": {"@type": "Organization", "name": "WorthChex", "url": SITE + "/about/"},
                       "publisher": {"@type": "Organization", "name": "WorthChex", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/worthchex-logo.webp"}}})
     if graph:
